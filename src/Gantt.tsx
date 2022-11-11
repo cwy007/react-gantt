@@ -17,31 +17,55 @@ import './Gantt.less'
 import GanttStore from './store'
 import { DefaultRecordType, Gantt } from './types'
 
-const prefixCls = 'gantt'
+const prefixCls = 'gantt' // TODO 这个变量迁移后可以删除
 
+/** 响应最外层容器组件的缩放 */
 const Body: React.FC = ({ children }) => {
   const { store } = useContext(Context)
   const reference = useRef<HTMLDivElement>(null)
   const size = useSize(reference)
+
   useEffect(() => {
     store.syncSize(size)
   }, [size, store])
+
   return (
     <div className={`${prefixCls}-body`} ref={reference}>
       {children}
     </div>
   )
 }
+
+/** 甘特图组件的属性 */
 export interface GanttProps<RecordType = DefaultRecordType> {
+  /** 数据源 */
   data: Gantt.Record<RecordType>[]
   columns: Gantt.Column[]
+  /**
+   * 依赖数组
+   */
   dependencies?: Gantt.Dependence[]
+  /**
+   * 修改回调 - 拖拽排期区间的时候会触发
+   * @param record 当前操作的数据源
+   * @param startDate 起点时间 // TODO 拖拽的进度，可否到小时
+   * @param endDate 结束时间
+   * @returns
+   */
   onUpdate: (record: Gantt.Record<RecordType>, startDate: string, endDate: string) => Promise<boolean>
+  /**
+   * 开始时间属性 key，默认值 startDate
+  */
   startDateKey?: string
+  /**
+   * 结束时间属性 key，默认值 endDate
+  */
   endDateKey?: string
   isRestDay?: (date: string) => boolean
   unit?: Gantt.Sight
+  /** 行高 */
   rowHeight?: number
+  /** 获取组件的方法 */
   innerRef?: React.MutableRefObject<GanttRef>
   getBarColor?: GanttContext<RecordType>['getBarColor']
   showBackToday?: GanttContext<RecordType>['showBackToday']
@@ -66,10 +90,14 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    */
   customSights?: Gantt.SightConfig[]
 }
+
+/** 甘特图组件的方法 */
 export interface GanttRef {
+  /** 返回今日 */
   backToday: () => void
   getWidthByDate: (startDate: Dayjs, endDate: Dayjs) => number
 }
+
 const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<RecordType>) => {
   const {
     data,
@@ -93,7 +121,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     tableCollapseAble = true,
     renderBarThumb,
     scrollTop = true,
-    rowHeight = ROW_HEIGHT,
+    rowHeight = ROW_HEIGHT, // 行高
     innerRef,
     disabled = false,
     alwaysShowTaskBar = true,
@@ -102,7 +130,11 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     onExpand,
     customSights = [],
   } = props
-  const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights }), [rowHeight, customSights])
+  const store = useMemo(
+    () => new GanttStore({ rowHeight, disabled, customSights }),
+    [rowHeight, customSights],
+  )
+
   useEffect(() => {
     store.setData(data, startDateKey, endDateKey)
   }, [data, endDateKey, startDateKey, store])
@@ -129,8 +161,8 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
 
   const ContextValue = React.useMemo(
     () => ({
-      prefixCls,
-      store,
+      prefixCls, // TODO 可以删除
+      store, // store 值通过 context 传递
       getBarColor,
       showBackToday,
       showUnitSwitch,
@@ -175,6 +207,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   return (
     <Context.Provider value={ContextValue}>
       <Body>
+        {/* TODO 使用 css module 修改样式 */}
         <header>
           <TableHeader />
           <TimeAxis />
@@ -193,4 +226,5 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     </Context.Provider>
   )
 }
+
 export default GanttComponent

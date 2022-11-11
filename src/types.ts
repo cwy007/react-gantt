@@ -26,6 +26,8 @@ export namespace Gantt {
     startDate: Dayjs
     endDate: Dayjs
   }
+
+  /** x轴单位 */
   export type Sight = 'day' | 'week' | 'month' | 'quarter' | 'halfYear'
   export type MoveType = 'left' | 'right' | 'move' | 'create'
 
@@ -77,6 +79,7 @@ export namespace Gantt {
     _index?: number
   }
 
+  /** 数据源 */
   export type Record<RecordType = DefaultRecordType> = RecordType & {
     group?: boolean
     borderColor?: string
@@ -99,6 +102,8 @@ export namespace Gantt {
     align?: ColumnAlign
   }
   export type DependenceType = 'start_finish' | 'finish_start' | 'start_start' | 'finish_finish'
+
+  /** 依赖 */
   export interface Dependence {
     from: string
     to: string

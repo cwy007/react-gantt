@@ -1,3 +1,4 @@
+/** 时间轴 */
 import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
@@ -8,6 +9,7 @@ import './index.less'
 
 const TimeAxis: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
+  // TODO CSS MODULE
   const prefixClsTimeAxis = `${prefixCls}-time-axis`
   const { sightConfig, isToday } = store
   const majorList = store.getMajorList()
@@ -80,3 +82,7 @@ const TimeAxis: React.FC = () => {
   )
 }
 export default observer(TimeAxis)
+
+// TODO
+// 文件夹命名方式 - 烤肉串
+// antd 中也是烤肉串形式名称的 dir

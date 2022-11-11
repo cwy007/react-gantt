@@ -40,5 +40,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   renderRightText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void
 }
-const context = createContext<GanttContext>({} as GanttContext)
-export default context
+
+const Context = createContext<GanttContext>({} as GanttContext)
+
+export default Context

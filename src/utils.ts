@@ -41,12 +41,17 @@ export function getMaxRange(bar: Gantt.Bar) {
     width: maxTranslateX - minTranslateX,
   }
 }
+
+/**
+ * 获取递增的 key，初始值为0
+ */
 const genKey = (() => {
   let key = 0
   return function () {
     return key++
   }
 })()
+
 export function transverseData(data: Gantt.Record[] = [], startDateKey: string, endDateKey: string) {
   const result: Gantt.Item[] = []
 

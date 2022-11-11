@@ -1,3 +1,8 @@
+/**
+ * // TODO: mobx v4 -> v6
+ * // dayjs -> moment
+ * 分号
+ */
 import dayjs, { Dayjs } from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import isBetween from 'dayjs/plugin/isBetween'
@@ -15,14 +20,18 @@ import { GanttProps as GanttProperties } from './Gantt'
 import { Gantt } from './types'
 import { flattenDeep, transverseData } from './utils'
 
+// TODO 使用 moment 替换
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
 dayjs.extend(quarterOfYear)
 dayjs.extend(advancedFormat)
 dayjs.extend(isBetween)
 dayjs.extend(isLeapYear)
+
+/** 一天对应的毫秒数 */
 export const ONE_DAY_MS = 86400000
-// 视图日视图、周视图、月视图、季视图、年视图
+
+/** 视图类型：日视图、周视图、月视图、季视图、年视图 */
 export const viewTypeList: Gantt.SightConfig[] = [
   {
     type: 'day',
@@ -50,10 +59,15 @@ export const viewTypeList: Gantt.SightConfig[] = [
     value: Gantt.ESightValues.halfYear,
   },
 ]
+
+/**
+ * 是否是休息日 0:周日 6:周六
+ */
 function isRestDay(date: string) {
-  const calc = [0, 6]
+  const calc = [0, 6]; // 0是周日
   return calc.includes(dayjs(date).weekday())
 }
+
 class GanttStore {
   constructor({ rowHeight, disabled = false, customSights }: { rowHeight: number; disabled: boolean; customSights: Gantt.SightConfig[] }) {
     this.width = 1320
@@ -91,12 +105,16 @@ class GanttStore {
 
   @observable collapse = false
 
+  /** table 的宽度 */
   @observable tableWidth: number
 
+  /** gantt 的宽度 */
   @observable viewWidth: number
 
+  /** table 和 gantt 容器的宽度 */
   @observable width: number
 
+  /** table 和 gantt 容器的高度 */
   @observable height: number
 
   @observable bodyWidth: number
@@ -137,8 +155,10 @@ class GanttStore {
 
   onUpdate: GanttProperties['onUpdate'] = () => Promise.resolve(true)
 
+  /** 是否是周六日 */
   isRestDay = isRestDay
 
+  /** 10天前 eg: Tue, 01 Nov 2022 10:34:53 GMT*/
   getStartDate() {
     return dayjs().subtract(10, 'day').toString()
   }
@@ -194,6 +214,10 @@ class GanttStore {
   handlePanEnd() {
     this.scrolling = false
   }
+
+  /**
+   * size 是元素 gantt-body 的尺寸（容器的尺寸）
+   */
   @action syncSize(size: { width?: number; height?: number }) {
     if (!size.height || !size.width) return
 
@@ -223,19 +247,25 @@ class GanttStore {
     // }
   }
 
+  /**
+   *
+   */
   @action initWidth() {
-    this.tableWidth = this.totalColumnWidth
-    this.viewWidth = this.width - this.tableWidth
+    this.tableWidth = this.totalColumnWidth // table 总的宽度
+    this.viewWidth = this.width - this.tableWidth // gantt图宽度
+
     // 图表宽度不能小于 200
     if (this.viewWidth < 200) {
       this.viewWidth = 200
       this.tableWidth = this.width - this.viewWidth
     }
   }
+
   @action
   setTranslateX(translateX: number) {
     this.translateX = Math.max(translateX, 0)
   }
+
   @action switchSight(type: Gantt.Sight) {
     const target = find(this.viewTypeList, { type })
     if (target) {
@@ -244,6 +274,7 @@ class GanttStore {
     }
   }
 
+  /** 返回今日 今日的坐标位于甘特图中间 */
   @action scrollToToday() {
     const translateX = this.todayTranslateX - this.viewWidth / 2
     this.setTranslateX(translateX)
@@ -311,7 +342,7 @@ class GanttStore {
     return height
   }
 
-  // 1px对应的毫秒数
+  /** 1px对应的毫秒数 */
   @computed get pxUnitAmp() {
     return this.sightConfig.value * 1000
   }
@@ -848,6 +879,7 @@ class GanttStore {
     }
   }
 
+  /** 日期 key 是否为今天 */
   isToday(key: string) {
     const now = dayjs().format('YYYY-MM-DD')
     const target = dayjs(key).format('YYYY-MM-DD')

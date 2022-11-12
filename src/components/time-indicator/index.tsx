@@ -4,6 +4,11 @@ import classNames from 'classnames';
 import Context from '../../context';
 import './index.less';
 
+/**
+ * 返回今日按钮
+ *
+ * 当今天没有显示在甘特图的可见区域时，会显示今天按钮，点击今天按钮，甘特图中会显示今天对应的坐标
+*/
 const TimeIndicator: React.FC = () => {
   const { store, prefixCls } = useContext(Context);
   const {
@@ -17,14 +22,17 @@ const TimeIndicator: React.FC = () => {
   const type = todayTranslateX < translateX ? 'left' : 'right';
   const left = type === 'left' ? tableWidth : 'unset';
   const right = type === 'right' ? 111 : 'unset';
+
   const display = useMemo(() => {
     const isOverLeft = todayTranslateX < translateX;
     const isOverRight = todayTranslateX > translateX + viewWidth;
     return isOverLeft || isOverRight ? 'block' : 'none';
   }, [todayTranslateX, translateX, viewWidth]);
+
   const handleClick = useCallback(() => {
     store.scrollToToday();
   }, [store]);
+
   return (
     <button
       onClick={handleClick}
@@ -39,4 +47,5 @@ const TimeIndicator: React.FC = () => {
     </button>
   );
 };
+
 export default observer(TimeIndicator);

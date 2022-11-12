@@ -72,6 +72,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   innerRef?: React.MutableRefObject<GanttRef>
   /** 返回默认条样式 */
   getBarColor?: GanttContext<RecordType>['getBarColor']
+  /** 展示返回今日，默认值true */
   showBackToday?: GanttContext<RecordType>['showBackToday']
   showUnitSwitch?: GanttContext<RecordType>['showUnitSwitch']
   onRow?: GanttContext<RecordType>['onRow']
@@ -239,8 +240,16 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
           <Chart />
         </main>
 
+        {/* 拖拽改变甘特图大小的分割线 */}
         <Divider />
+
+        {/*
+          返回今日按钮
+            当今天没有显示在甘特图的可见区域时，会显示今天按钮，
+            点击今天按钮，甘特图中会显示今天对应的坐标
+        */}
         {showBackToday && <TimeIndicator />}
+
         {showUnitSwitch && <TimeAxisScaleSelect />}
         <ScrollBar />
         {scrollTop && <ScrollTop />}

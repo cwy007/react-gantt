@@ -39,6 +39,7 @@ const App = () => (
       tableIndent={0}
       onUpdate={async () => true}
       // tableCollapseAble={false}
+      showBackToday
     />
   </div>
 )

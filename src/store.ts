@@ -113,6 +113,7 @@ class GanttStore {
   /** 依赖 */
   @observable dependencies: Gantt.Dependence[] = []
 
+  /** 甘特图是否在水平移动 */
   @observable scrolling = false
 
   @observable scrollTop = 0

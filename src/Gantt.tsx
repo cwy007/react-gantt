@@ -74,6 +74,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   getBarColor?: GanttContext<RecordType>['getBarColor']
   /** 展示返回今日，默认值true */
   showBackToday?: GanttContext<RecordType>['showBackToday']
+  /** 展示视图切换，默认值true */
   showUnitSwitch?: GanttContext<RecordType>['showUnitSwitch']
   onRow?: GanttContext<RecordType>['onRow']
   tableIndent?: GanttContext<RecordType>['tableIndent']
@@ -250,8 +251,13 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
         */}
         {showBackToday && <TimeIndicator />}
 
+        {/* 展示视图切换 */}
         {showUnitSwitch && <TimeAxisScaleSelect />}
+
+        {/* 甘特图下方的滚动条 */}
         <ScrollBar />
+
+        {/* 展示视图切换 */}
         {scrollTop && <ScrollTop />}
       </Body>
     </Context.Provider>

@@ -134,7 +134,7 @@ class GanttStore {
 
   @observable bodyWidth: number
 
-  /** 水平移动的距离 */
+  /** 水平移动的距离, > 0, 向右平移甘特图时translateX变小，向左移动甘特图translateX变大 */
   @observable translateX: number
 
   /** 当前视图配置 */
@@ -326,14 +326,17 @@ class GanttStore {
     return dayjs().startOf('day').valueOf() / this.pxUnitAmp
   }
 
+  /** 甘特图下方滚动条拖拽按钮的宽度 30..160 */
   @computed get scrollBarWidth() {
     const MIN_WIDTH = 30
     return Math.max((this.viewWidth / this.scrollWidth) * 160, MIN_WIDTH)
   }
 
+  /** 甘特图下方滚动条拖拽按钮样式 left 属性 */
   @computed get scrollLeft() {
     const rate = this.viewWidth / this.scrollWidth
     const currentDate = dayjs(this.translateAmp).toString()
+    console.log('currentDate', currentDate)
     // 默认滚动条在中间
     const half = (this.viewWidth - this.scrollBarWidth) / 2
     const viewScrollLeft =
@@ -341,11 +344,13 @@ class GanttStore {
     return Math.min(Math.max(viewScrollLeft, 0), this.viewWidth - this.scrollBarWidth)
   }
 
+  /** 相对应甘特图初始位置 this.getStartDate 的偏移量 */
   @computed get scrollWidth() {
     // TODO 待研究
     // 最小宽度
-    const init = this.viewWidth + 200
-    return Math.max(Math.abs(this.viewWidth + this.translateX - this.getTranslateXByDate(this.getStartDate())), init)
+    const init = this.viewWidth + 200 // 甘特图最小宽度200
+    const value = this.viewWidth + this.translateX - this.getTranslateXByDate(this.getStartDate())
+    return Math.max(Math.abs(value), init) // 取的绝对值 - 控制拖拽按钮长度和位置的变化
   }
 
   // 内容区滚动高度
@@ -405,6 +410,7 @@ class GanttStore {
   /** 当前开始时间毫秒数 */
   @computed get translateAmp() {
     const { translateX } = this
+    console.log('translateX', translateX)
     return this.pxUnitAmp * translateX
   }
 

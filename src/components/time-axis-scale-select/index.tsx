@@ -6,17 +6,22 @@ import Context from '../../context'
 import { Gantt } from '../../types'
 import './index.less'
 
+/** 视图切换 - 选择横轴时间单位比例 */
 const TimeAxisScaleSelect: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const { sightConfig, scrolling, viewTypeList } = store
   const [visible, setVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+
+  // 监听目标元素外的点击事件
   useClickAway(() => {
     setVisible(false)
   }, ref)
+
   const handleClick = useCallback(() => {
     setVisible(true)
   }, [])
+
   const handleSelect = useCallback(
     (item: Gantt.SightConfig) => {
       store.switchSight(item.type)
@@ -24,6 +29,7 @@ const TimeAxisScaleSelect: React.FC = () => {
     },
     [store]
   )
+
   const selected = sightConfig.type
   const isSelected = useCallback((key: string) => key === selected, [selected])
   return (

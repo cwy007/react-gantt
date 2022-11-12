@@ -4,37 +4,44 @@ import { observer } from 'mobx-react-lite'
 import Context from '../../context'
 import './index.less'
 
+/** 甘特图下方的滚动条 */
 const ScrollBar: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const { tableWidth, viewWidth } = store
   const width = store.scrollBarWidth
   const prefixClsScrollBar = `${prefixCls}-scroll_bar`
+  //
   const [resizing, setResizing] = useState(false)
   const positionRef = useRef({
-    scrollLeft: 0,
     left: 0,
     translateX: 0,
   })
+
+  // TODO https://ahooks.gitee.io/zh-CN/hooks/use-memoized-fn
+  //
   const handleMouseMove = usePersistFn((event: MouseEvent) => {
-    const distance = event.clientX - positionRef.current.left
+    const distance = event.clientX - positionRef.current.left // 鼠标移动的距离
+    console.log('distance->', distance)
     // TODO 调整倍率
+    // 甘特图下方滚动条拖拽按钮的宽度越小，滚动越快
     store.setTranslateX(distance * (store.viewWidth / store.scrollBarWidth) + positionRef.current.translateX)
   })
+
   const handleMouseUp = useCallback(() => {
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseup', handleMouseUp)
     setResizing(false)
   }, [handleMouseMove])
+
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      positionRef.current.left = event.clientX
-      positionRef.current.translateX = store.translateX
-      positionRef.current.scrollLeft = store.scrollLeft
+      positionRef.current.left = event.clientX // 初始坐标
+      positionRef.current.translateX = store.translateX // 当前平移距离
       window.addEventListener('mousemove', handleMouseMove)
       window.addEventListener('mouseup', handleMouseUp)
       setResizing(true)
     },
-    [handleMouseMove, handleMouseUp, store.scrollLeft, store.translateX]
+    [handleMouseMove, handleMouseUp, store.translateX]
   )
 
   return (
@@ -44,6 +51,7 @@ const ScrollBar: React.FC = () => {
       style={{ left: tableWidth, width: viewWidth }}
       onMouseDown={handleMouseDown}
     >
+      {/* 滑动滚动条时，修改鼠标的样式 */}
       {resizing && (
         <div
           style={{
@@ -57,6 +65,8 @@ const ScrollBar: React.FC = () => {
           }}
         />
       )}
+
+      {/*  */}
       <div
         className={`${prefixClsScrollBar}-thumb`}
         style={{

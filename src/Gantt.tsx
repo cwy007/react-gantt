@@ -70,6 +70,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   rowHeight?: number
   /** 获取组件的方法 */
   innerRef?: React.MutableRefObject<GanttRef>
+  /** 返回默认条样式 */
   getBarColor?: GanttContext<RecordType>['getBarColor']
   showBackToday?: GanttContext<RecordType>['showBackToday']
   showUnitSwitch?: GanttContext<RecordType>['showUnitSwitch']
@@ -111,36 +112,37 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     startDateKey = 'startDate',
     endDateKey = 'endDate',
     isRestDay,
-    getBarColor,
-    showBackToday = true,
-    showUnitSwitch = true,
+    getBarColor, //
+    showBackToday = true, //
+    showUnitSwitch = true, //
     unit,
-    onRow,
-    tableIndent = TABLE_INDENT,
-    expandIcon,
-    renderBar,
-    renderInvalidBar,
-    renderGroupBar,
-    onBarClick,
-    tableCollapseAble = true,
-    renderBarThumb,
-    scrollTop = true,
-    rowHeight = ROW_HEIGHT, // 行高
+    onRow, //
+    tableIndent = TABLE_INDENT, //
+    expandIcon, //
+    renderBar, //
+    renderInvalidBar, //
+    renderGroupBar, //
+    onBarClick, //
+    tableCollapseAble = true, //
+    renderBarThumb, //
+    scrollTop = true, //
+    rowHeight = ROW_HEIGHT,
     innerRef,
     disabled = false,
-    alwaysShowTaskBar = true,
-    renderLeftText,
-    renderRightText,
-    onExpand,
+    alwaysShowTaskBar = true, //
+    renderLeftText, //
+    renderRightText, //
+    onExpand, //
     customSights = [],
   } = props
 
-  // 实例化store
+  // Memo 实例化store
   const store = useMemo(
     () => new GanttStore({ rowHeight, disabled, customSights }),
     [rowHeight, customSights],
   )
 
+  // Effect
   useEffect(() => {
     store.setData(data, startDateKey, endDateKey)
   }, [data, endDateKey, startDateKey, store])
@@ -165,6 +167,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     if (unit) store.switchSight(unit)
   }, [unit, store])
 
+  // Ref
   useImperativeHandle(innerRef, () => ({
     backToday: () => store.scrollToToday(),
     getWidthByDate: store.getWidthByDate,
@@ -223,11 +226,18 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
           <TableHeader />
           <TimeAxis />
         </header>
+
         <main ref={store.mainElementRef} onScroll={store.handleScroll}>
+          {/* 鼠标hover效果*/}
           <SelectionIndicator />
+
+          {/* table */}
           <TableBody />
+
+          {/* 甘特图 */}
           <Chart />
         </main>
+
         <Divider />
         {showBackToday && <TimeIndicator />}
         {showUnitSwitch && <TimeAxisScaleSelect />}

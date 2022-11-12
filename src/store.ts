@@ -257,9 +257,15 @@ class GanttStore {
     }
   }
 
+  /**
+   * 左右拖拽改变 table 宽度的回调
+   *
+   * 1.每一列都设置了 width 属性时，不改变 table 的总宽度
+   */
   @action handleResizeTableWidth(width: number) {
     const columnsWidthArr = this.columns.filter(column => column.width > 0)
     if (this.columns.length === columnsWidthArr.length) return
+
     this.tableWidth = width
     this.viewWidth = this.width - this.tableWidth
     // if (width <= this.totalColumnWidth) {
@@ -363,22 +369,14 @@ class GanttStore {
     // 剩余宽度 - 当 table 被隐藏时 tableWidth 为0
     // 这时得到的 restWidth <= 0
     //
-    const restWidth = this.tableWidth - totalColumnWidth
-    console.log('restWidth->', restWidth);
-    console.log('restWidth->2', this.columns.map(column => {
-      if (column.width) return column.width
-
-      if (column.flex) return restWidth * (column.flex / totalFlex)
-
-      return restWidth * (1 / totalFlex) // 不指定 width 和 flex 的 column，平分剩余的宽度（宽度相等）
-    }))
+    const restWidth = this.tableWidth - totalColumnWidth > 0 ? this.tableWidth - totalColumnWidth : 0
     return this.columns.map(column => {
       if (column.width) return column.width
 
       if (column.flex) return restWidth * (column.flex / totalFlex)
 
       return restWidth * (1 / totalFlex) // 不指定 width 和 flex 的 column，平分剩余的宽度（宽度相等）
-    }).map(width => (width > 0 ? width : 100))
+    })
   }
 
   /** table 总的宽度 */

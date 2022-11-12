@@ -18,7 +18,7 @@ const Divider: React.FC = () => {
     },
     [store]
   )
-  const left = tableWidth
+  const left = tableWidth // table 的宽度
 
   const handleResize = useCallback(
     ({ width }: { width: number }) => {
@@ -26,22 +26,25 @@ const Divider: React.FC = () => {
     },
     [store]
   )
+
   const [handleMouseDown, resizing] = useDragResize(handleResize, {
     initSize: {
-      width: tableWidth,
+      width: tableWidth, // 初始宽度
     },
-    minWidth: 200,
-    maxWidth: store.width * 0.6,
+    minWidth: 200, // 最小宽度
+    maxWidth: store.width * 0.6, // 最大宽度
   })
+
   return (
     <div
       role='none'
       className={classNames(prefixClsDivider, {
         [`${prefixClsDivider}_only`]: !tableCollapseAble,
       })}
-      style={{ left: left - 1 }}
+      style={{ left: left - 1 }} // position absolute
       onMouseDown={tableWidth === 0 ? undefined : handleMouseDown}
     >
+      {/* 拖拽时改变鼠标的样式 */}
       {resizing && (
         <div
           style={{
@@ -55,7 +58,11 @@ const Divider: React.FC = () => {
           }}
         />
       )}
+
+      {/* 拖拽改变table宽度的竖线 */}
       <hr />
+
+      {/* 显示/隐藏数据的箭头 */}
       {tableCollapseAble && (
         <div
           className={`${prefixClsDivider}-icon-wrapper`}
@@ -73,4 +80,5 @@ const Divider: React.FC = () => {
     </div>
   )
 }
+
 export default observer(Divider)

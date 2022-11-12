@@ -27,15 +27,18 @@ const App = () => (
         {
           name: 'startDate',
           label: '开始时间',
+          width: 100,
         },
         {
           name: 'endDate',
           label: '结束时间',
+          // width: 100, // 如果table的colums中每一个都设置了宽度 width，无法
           render: record => <span>{record.endDate}</span>,
         },
       ]}
       tableIndent={0}
       onUpdate={async () => true}
+      // tableCollapseAble={false}
     />
   </div>
 )

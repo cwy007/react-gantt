@@ -40,6 +40,7 @@ const Body: React.FC = ({ children }) => {
 export interface GanttProps<RecordType = DefaultRecordType> {
   /** 数据源 */
   data: Gantt.Record<RecordType>[]
+  /** 数据列 */
   columns: Gantt.Column[]
   /**
    * 依赖数组
@@ -61,7 +62,9 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    * 结束时间属性 key，默认值 endDate
   */
   endDateKey?: string
+  /** 返回是否是节假日 - 默认周六，周日 */
   isRestDay?: (date: string) => boolean
+  /** 当前视图 */
   unit?: Gantt.Sight
   /** 行高 */
   rowHeight?: number
@@ -80,6 +83,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   onBarClick?: GanttContext<RecordType>['onBarClick']
   tableCollapseAble?: GanttContext<RecordType>['tableCollapseAble']
   scrollTop?: GanttContext<RecordType>['scrollTop']
+  /** 是否禁用图表 */
   disabled?: boolean
   alwaysShowTaskBar?: boolean
   renderLeftText?: GanttContext<RecordType>['renderLeftText']
@@ -130,6 +134,8 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     onExpand,
     customSights = [],
   } = props
+
+  // 实例化store
   const store = useMemo(
     () => new GanttStore({ rowHeight, disabled, customSights }),
     [rowHeight, customSights],
@@ -138,12 +144,15 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     store.setData(data, startDateKey, endDateKey)
   }, [data, endDateKey, startDateKey, store])
+
   useEffect(() => {
     store.setColumns(columns)
   }, [columns, store])
+
   useEffect(() => {
     store.setOnUpdate(onUpdate)
   }, [onUpdate, store])
+
   useEffect(() => {
     store.setDependencies(dependencies)
   }, [dependencies, store])
@@ -151,9 +160,11 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
   useEffect(() => {
     if (isRestDay) store.setIsRestDay(isRestDay)
   }, [isRestDay, store])
+
   useEffect(() => {
     if (unit) store.switchSight(unit)
   }, [unit, store])
+
   useImperativeHandle(innerRef, () => ({
     backToday: () => store.scrollToToday(),
     getWidthByDate: store.getWidthByDate,

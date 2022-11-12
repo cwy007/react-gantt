@@ -31,17 +31,33 @@ export namespace Gantt {
   export type Sight = 'day' | 'week' | 'month' | 'quarter' | 'halfYear'
   export type MoveType = 'left' | 'right' | 'move' | 'create'
 
+  /**
+   * 1px对应的秒数
+   *
+   * 每格的宽度固定为 30px
+   *
+   * 视图类型为日day：24 * 60 * 60 / 30 => 2880
+   * */
   export enum ESightValues {
+    /** x轴单位为天时，1px对应的秒数 */
     day = 2880,
-    week = 3600,
+    /** x轴单位为周时，1px对应的秒数 */
+    week = 3600, // 24 * 60 * 60 * 7 / 168, 每格宽度 168
+    /** x轴单位为月时，1px对应的秒数 */
     month = 14400,
+    /** x轴单位为季度时，1px对应的秒数 */
     quarter = 86400,
+    /** x轴单位为半年时，1px对应的秒数 */
     halfYear = 115200,
   }
 
+  /** 视图类型配置 */
   export interface SightConfig {
+    /** 视图类型 - x轴单位类型 */
     type: Sight
+    /** 视图名称 */
     label: string
+    /** 1px对应的秒数 */
     value: ESightValues
   }
   export interface Bar<RecordType = DefaultRecordType> {
@@ -64,6 +80,8 @@ export namespace Gantt {
     _childrenCount: number
     _parent?: Item<RecordType>
   }
+
+  /** 转换过的数据源 - 在组件内部使用 */
   export interface Item<RecordType = DefaultRecordType> {
     record: Record<RecordType>
     key: React.Key
@@ -79,7 +97,7 @@ export namespace Gantt {
     _index?: number
   }
 
-  /** 数据源 */
+  /** 原有的数据源 - 组件的 data props */
   export type Record<RecordType = DefaultRecordType> = RecordType & {
     group?: boolean
     borderColor?: string
@@ -90,6 +108,8 @@ export namespace Gantt {
   }
 
   export type ColumnAlign = 'center' | 'right' | 'left'
+
+  /** 数据列 */
   export interface Column<RecordType = DefaultRecordType> {
     width?: number
     minWidth?: number
@@ -101,7 +121,12 @@ export namespace Gantt {
     render?: (item: Record<RecordType>) => React.ReactNode
     align?: ColumnAlign
   }
-  export type DependenceType = 'start_finish' | 'finish_start' | 'start_start' | 'finish_finish'
+
+  export type DependenceType =
+   'start_finish' // TODO
+   | 'finish_start'
+   | 'start_start'
+   | 'finish_finish'
 
   /** 依赖 */
   export interface Dependence {

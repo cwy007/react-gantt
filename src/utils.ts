@@ -52,12 +52,13 @@ const genKey = (() => {
   }
 })()
 
+/** 对原有的数据源 data 进行转换 */
 export function transverseData(data: Gantt.Record[] = [], startDateKey: string, endDateKey: string) {
   const result: Gantt.Item[] = []
 
   for (const record of data) {
     const item: Gantt.Item = {
-      key: genKey(),
+      key: genKey(), // TODO
       record,
       content: '',
       group: record.group,

@@ -31,7 +31,9 @@ dayjs.extend(isLeapYear)
 /** 一天对应的毫秒数 */
 export const ONE_DAY_MS = 86400000
 
-/** 视图类型：日视图、周视图、月视图、季视图、年视图 */
+/**
+ * 视图类型：日视图、周视图、月视图、季视图、年视图
+ */
 export const viewTypeList: Gantt.SightConfig[] = [
   {
     type: 'day',
@@ -69,7 +71,15 @@ function isRestDay(date: string) {
 }
 
 class GanttStore {
-  constructor({ rowHeight, disabled = false, customSights }: { rowHeight: number; disabled: boolean; customSights: Gantt.SightConfig[] }) {
+  constructor({
+    rowHeight,
+    disabled = false,
+    customSights
+  }: {
+    rowHeight: number;
+    disabled: boolean;
+    customSights: Gantt.SightConfig[];
+  }) {
     this.width = 1320
     this.height = 418
     this.viewTypeList = customSights.length ? customSights : viewTypeList
@@ -91,12 +101,16 @@ class GanttStore {
 
   scrollTimer: number | undefined
 
+  /** 转换过的数据源 */
   @observable data: Gantt.Item[] = []
 
+  /** 原有的数据源 */
   @observable originData: Gantt.Record[] = []
 
+  /** 数据列 */
   @observable columns: Gantt.Column[] = []
 
+  /** 依赖 */
   @observable dependencies: Gantt.Dependence[] = []
 
   @observable scrolling = false
@@ -119,8 +133,10 @@ class GanttStore {
 
   @observable bodyWidth: number
 
+  /** 水平移动的距离 */
   @observable translateX: number
 
+  /** 当前视图配置 */
   @observable sightConfig: Gantt.SightConfig
 
   @observable showSelectionIndicator = false
@@ -131,8 +147,10 @@ class GanttStore {
 
   @observable draggingType: Gantt.MoveType | null = null
 
+  /** 是否禁用图表 */
   @observable disabled = false
 
+  /** 视图类型：日视图、周视图、月视图、季视图、年视图 */
   viewTypeList = viewTypeList
 
   gestureKeyPress = false
@@ -143,8 +161,10 @@ class GanttStore {
 
   isPointerPress = false
 
+  /** 开始时间的字段名称 */
   startDateKey = 'startDate'
 
+  /** 接受时间的字段名称 */
   endDateKey = 'endDate'
 
   autoScrollPos = 0
@@ -153,6 +173,7 @@ class GanttStore {
 
   rowHeight: number
 
+  /** 修改回调 */
   onUpdate: GanttProperties['onUpdate'] = () => Promise.resolve(true)
 
   /** 是否是周六日 */
@@ -163,16 +184,17 @@ class GanttStore {
     return dayjs().subtract(10, 'day').toString()
   }
 
+  /** 覆盖默认的是否是休假日判断函数 */
   setIsRestDay(function_: (date: string) => boolean) {
     this.isRestDay = function_ || isRestDay
   }
 
   @action
   setData(data: Gantt.Record[], startDateKey: string, endDateKey: string) {
-    this.startDateKey = startDateKey
-    this.endDateKey = endDateKey
-    this.originData = data
-    this.data = transverseData(data, startDateKey, endDateKey)
+    this.startDateKey = startDateKey // 字段名称
+    this.endDateKey = endDateKey // endDate 对应的字段名称
+    this.originData = data // 数据源
+    this.data = transverseData(data, startDateKey, endDateKey) // 格式化后的数据源
   }
 
   @action
@@ -200,6 +222,7 @@ class GanttStore {
   setColumns(columns: Gantt.Column[]) {
     this.columns = columns
   }
+
   @action
   setDependencies(dependencies: Gantt.Dependence[]) {
     this.dependencies = dependencies
@@ -248,10 +271,11 @@ class GanttStore {
   }
 
   /**
-   *
+   * 图表宽度不能小于 200
    */
   @action initWidth() {
     this.tableWidth = this.totalColumnWidth // table 总的宽度
+    // 如果屏幕宽度被拉大，table宽度不变，甘特图宽度变大
     this.viewWidth = this.width - this.tableWidth // gantt图宽度
 
     // 图表宽度不能小于 200
@@ -261,11 +285,12 @@ class GanttStore {
     }
   }
 
-  @action
-  setTranslateX(translateX: number) {
+  /** 水平移动的距离 */
+  @action setTranslateX(translateX: number) {
     this.translateX = Math.max(translateX, 0)
   }
 
+  /** 切换视图 */
   @action switchSight(type: Gantt.Sight) {
     const target = find(this.viewTypeList, { type })
     if (target) {
@@ -280,10 +305,12 @@ class GanttStore {
     this.setTranslateX(translateX)
   }
 
+  /** 获取指定日期 date 对应的平移距离 px */
   getTranslateXByDate(date: string) {
     return dayjs(date).startOf('day').valueOf() / this.pxUnitAmp
   }
 
+  /** 今日对应的横坐标 px */
   @computed get todayTranslateX() {
     return dayjs().startOf('day').valueOf() / this.pxUnitAmp
   }
@@ -316,8 +343,14 @@ class GanttStore {
     return this.height - HEADER_HEIGHT - 1
   }
 
+  /**
+   * 设置每一列的宽度
+   */
   @computed get getColumnsWidth(): number[] {
+    // 为1列时最小宽度为200
     if (this.columns.length === 1 && this.columns[0]?.width < 200) return [200]
+
+    // columns 中指定的 width 和
     const totalColumnWidth = this.columns.reduce((width, item) => width + (item.width || 0), 0)
     const totalFlex = this.columns.reduce((total, item) => total + (item.width ? 0 : item.flex || 1), 0)
     const restWidth = this.tableWidth - totalColumnWidth
@@ -326,10 +359,11 @@ class GanttStore {
 
       if (column.flex) return restWidth * (column.flex / totalFlex)
 
-      return restWidth * (1 / totalFlex)
+      return restWidth * (1 / totalFlex) // 不指定 width 和 flex 的 column，平分剩余的宽度（宽度相等）
     })
   }
 
+  /** table 总的宽度 */
   @computed get totalColumnWidth(): number {
     return this.getColumnsWidth.reduce((width, item) => width + (item || 0), 0)
   }
@@ -342,7 +376,11 @@ class GanttStore {
     return height
   }
 
-  /** 1px对应的毫秒数 */
+  /**
+   * 1px对应的毫秒数
+   *
+   * amp -> amplification 放大
+   * */
   @computed get pxUnitAmp() {
     return this.sightConfig.value * 1000
   }

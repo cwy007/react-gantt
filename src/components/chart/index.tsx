@@ -83,6 +83,8 @@ const Chart: React.FC = () => {
       >
         <BarThumbList />
         <BarList />
+
+        {/* 今天对应的辅助线 */}
         <Today />
       </div>
     </div>

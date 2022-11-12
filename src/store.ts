@@ -358,7 +358,7 @@ class GanttStore {
     return Math.max(Math.abs(value), init) // 取的绝对值 - 控制拖拽按钮长度和位置的变化
   }
 
-  // 内容区滚动高度
+  /** 内容区滚动高度 */
   @computed get bodyClientHeight() {
     // 1是边框
     return this.height - HEADER_HEIGHT - 1
@@ -399,7 +399,10 @@ class GanttStore {
 
   /** 内容区滚动区域高度 */
   @computed get bodyScrollHeight() {
+    // 数据行的高度
     let height = this.getBarList.length * this.rowHeight + TOP_PADDING
+
+    // 容器gantt-body中对应的 table-body 高度
     if (height < this.bodyClientHeight) height = this.bodyClientHeight
 
     return height

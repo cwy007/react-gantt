@@ -3,8 +3,10 @@ import { observer } from 'mobx-react-lite'
 import Context from '../../context'
 import './index.less'
 
+/** 今天对应的辅助线 */
 const Today: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
+
   return (
     <div
       className={`${prefixCls}-today`}

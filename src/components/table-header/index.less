@@ -22,7 +22,11 @@
   &-cell {
     position: relative;
     display: flex;
-    border-right: 1px solid #f0f0f0;
+
+    // TODO
+    &:not(:last-child) {
+      border-right: 1px solid #f0f0f0;
+    }
   }
 
   &-head-cell {
@@ -31,7 +35,7 @@
     align-items: center;
     overflow: hidden;
     padding: 0 12px;
-    user-select: none;
+    // user-select: none;
     font-size: 14px;
     color: #2e405e;
   }

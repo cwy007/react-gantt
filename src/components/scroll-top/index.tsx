@@ -11,7 +11,7 @@ const ScrollTop: React.FC = () => {
 
   const handleClick = useCallback(() => {
     if (store.mainElementRef.current) {
-      store.mainElementRef.current.scrollTop = 0;
+      store.mainElementRef.current.scrollTop = 0; // TODO
     }
   }, [store.mainElementRef]);
 

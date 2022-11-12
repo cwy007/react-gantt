@@ -1,6 +1,8 @@
 import { useSize } from 'ahooks'
 import { Dayjs } from 'dayjs'
-import React, { useContext, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
+import React, {
+  useContext, useEffect, useImperativeHandle, useMemo, useRef, useCallback,
+} from 'react'
 import Chart from './components/chart'
 import Divider from './components/divider'
 import ScrollBar from './components/scroll-bar'
@@ -29,8 +31,25 @@ const Body: React.FC = ({ children }) => {
     store.syncSize(size)
   }, [size, store])
 
+  const handleMouseMove = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.persist()
+      store.handleMouseMove(event)
+    },
+    [store]
+  )
+
+  const handleMouseLeave = useCallback(() => {
+    store.handleMouseLeave()
+  }, [store])
+
   return (
-    <div className={`${prefixCls}-body`} ref={reference}>
+    <div
+      className={`${prefixCls}-body`}
+      ref={reference}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
       {children}
     </div>
   )

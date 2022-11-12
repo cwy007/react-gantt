@@ -160,18 +160,6 @@ const TableBody: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const prefixClsTableBody = `${prefixCls}-table-body`
 
-  const handleMouseMove = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      event.persist()
-      store.handleMouseMove(event)
-    },
-    [store]
-  )
-
-  const handleMouseLeave = useCallback(() => {
-    store.handleMouseLeave()
-  }, [store])
-
   return (
     <div
       className={prefixClsTableBody}
@@ -179,8 +167,6 @@ const TableBody: React.FC = () => {
         width: store.tableWidth,
         height: store.bodyScrollHeight,
       }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
       <ObserverTableBorders />
       <ObserverTableRows />

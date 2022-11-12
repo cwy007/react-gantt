@@ -60,6 +60,7 @@ export namespace Gantt {
     /** 1px对应的秒数 */
     value: ESightValues
   }
+
   export interface Bar<RecordType = DefaultRecordType> {
     key: React.Key
     label: string
@@ -114,11 +115,15 @@ export namespace Gantt {
     width?: number
     minWidth?: number
     maxWidth?: number
+    /** 不指定宽度时，平分剩余宽度 */
     flex?: number
     name: string
+    /** 字段名称 */
     label: string
+    /** head-cell 样式 */
     style?: Object
     render?: (item: Record<RecordType>) => React.ReactNode
+    /** textAlign 默认 left */
     align?: ColumnAlign
   }
 

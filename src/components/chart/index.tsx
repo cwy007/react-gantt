@@ -12,16 +12,7 @@ const Chart: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const { tableWidth, viewWidth, bodyScrollHeight, translateX, chartElementRef } = store
   const minorList = store.getMinorList()
-  const handleMouseMove = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      event.persist()
-      store.handleMouseMove(event)
-    },
-    [store]
-  )
-  const handleMouseLeave = useCallback(() => {
-    store.handleMouseLeave()
-  }, [store])
+
   useEffect(() => {
     const element = chartElementRef.current
     if (element) element.addEventListener('wheel', store.handleWheel)
@@ -30,12 +21,11 @@ const Chart: React.FC = () => {
       if (element) element.removeEventListener('wheel', store.handleWheel)
     }
   }, [chartElementRef, store])
+
   return (
     <div
       ref={chartElementRef}
       className={`${prefixCls}-chart`}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       style={{
         left: tableWidth,
         width: viewWidth,

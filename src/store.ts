@@ -164,6 +164,7 @@ class GanttStore {
 
   chartElementRef = createRef<HTMLDivElement>()
 
+  /** 是否在拖拽排期区间 */
   isPointerPress = false
 
   /** 开始时间的字段名称 */
@@ -365,6 +366,8 @@ class GanttStore {
 
   /**
    * 设置每一列的宽度
+   *
+   * 在 table-header 中使用
    */
   @computed get getColumnsWidth(): number[] {
     // 为1列时最小宽度为200
@@ -700,6 +703,9 @@ class GanttStore {
     this.setTranslateX(translateX)
   }
 
+  /**
+   *
+   */
   @computed get getBarList(): Gantt.Bar[] {
     const { pxUnitAmp, data } = this
     // 最小宽度
@@ -787,11 +793,13 @@ class GanttStore {
     }, 100)
   }
 
+  /** 上下滚动时的回调 */
   handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { scrollTop } = event.currentTarget
     this.scrollY(scrollTop)
   }
 
+  /** tableBody 和 gantt 的父元素 main 元素的滚动高度 */
   scrollY = throttle((scrollTop: number) => {
     this.scrollTop = scrollTop
   }, 100)
@@ -809,29 +817,34 @@ class GanttStore {
     }
   }
 
+  /** 在 table-body, gantt 上移动鼠标时触发 */
   handleMouseMove = debounce(event => {
     if (!this.isPointerPress) this.showSelectionBar(event)
   }, 5)
 
-  handleMouseLeave() {
+  /** 鼠标离开容器区域后 */
+  handleMouseLeave = debounce(() => {
     this.showSelectionIndicator = false
-  }
+  }, 5)
 
-  @action
-  showSelectionBar(event: MouseEvent) {
+  /** 显示：模拟鼠标hover效果 */
+  @action showSelectionBar(event: MouseEvent) {
     const scrollTop = this.mainElementRef.current?.scrollTop || 0
+    // top 元素上边距离浏览器窗口上边的距离
     const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
       top: 0,
     }
     // 内容区高度
     const contentHeight = this.getBarList.length * this.rowHeight
     const offsetY = event.clientY - top + scrollTop
+    console.log('contentHeight-->', contentHeight)
+    console.log('offsetY-->', offsetY)
     if (offsetY - contentHeight > TOP_PADDING) {
       this.showSelectionIndicator = false
     } else {
       const topValue = Math.floor((offsetY - TOP_PADDING) / this.rowHeight) * this.rowHeight + TOP_PADDING
-      this.showSelectionIndicator = true
-      this.selectionIndicatorTop = topValue
+      this.showSelectionIndicator = true // 模拟鼠标hover效果
+      this.selectionIndicatorTop = topValue // 模拟元素的位置
     }
   }
 
@@ -840,8 +853,7 @@ class GanttStore {
     return this.selectionIndicatorTop >= baseTop && this.selectionIndicatorTop <= baseTop + this.rowHeight
   }
 
-  @action
-  handleDragStart(barInfo: Gantt.Bar, type: Gantt.MoveType) {
+  @action handleDragStart(barInfo: Gantt.Bar, type: Gantt.MoveType) {
     this.dragging = barInfo
     this.draggingType = type
     barInfo.stepGesture = 'start'

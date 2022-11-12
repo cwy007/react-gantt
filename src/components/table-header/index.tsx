@@ -9,6 +9,7 @@ const TableHeader: React.FC = () => {
   const width = tableWidth;
   const columnsWidth = store.getColumnsWidth;
   const prefixClsTableHeader = `${prefixCls}-table-header`;
+
   return (
     <div className={prefixClsTableHeader} style={{ width, height: 56 }}>
       <div

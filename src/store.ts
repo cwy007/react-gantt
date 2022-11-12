@@ -197,8 +197,12 @@ class GanttStore {
     this.data = transverseData(data, startDateKey, endDateKey) // 格式化后的数据源
   }
 
-  @action
-  toggleCollapse() {
+  /**
+   * 1.将table的宽度改为0
+   *
+   * 2.
+   */
+  @action toggleCollapse() {
     if (this.tableWidth > 0) {
       this.tableWidth = 0
       this.viewWidth = this.width - this.tableWidth
@@ -348,19 +352,33 @@ class GanttStore {
    */
   @computed get getColumnsWidth(): number[] {
     // 为1列时最小宽度为200
-    if (this.columns.length === 1 && this.columns[0]?.width < 200) return [200]
+    // FIXME TODO: 原来组件这里是有bug的
+    // undefined < 200 -> false
+    if (this.columns.length === 1 && (this.columns[0]?.width || 0) < 200) return [200]
 
     // columns 中指定的 width 和
     const totalColumnWidth = this.columns.reduce((width, item) => width + (item.width || 0), 0)
     const totalFlex = this.columns.reduce((total, item) => total + (item.width ? 0 : item.flex || 1), 0)
+    // FIXME:
+    // 剩余宽度 - 当 table 被隐藏时 tableWidth 为0
+    // 这时得到的 restWidth <= 0
+    //
     const restWidth = this.tableWidth - totalColumnWidth
+    console.log('restWidth->', restWidth);
+    console.log('restWidth->2', this.columns.map(column => {
+      if (column.width) return column.width
+
+      if (column.flex) return restWidth * (column.flex / totalFlex)
+
+      return restWidth * (1 / totalFlex) // 不指定 width 和 flex 的 column，平分剩余的宽度（宽度相等）
+    }))
     return this.columns.map(column => {
       if (column.width) return column.width
 
       if (column.flex) return restWidth * (column.flex / totalFlex)
 
       return restWidth * (1 / totalFlex) // 不指定 width 和 flex 的 column，平分剩余的宽度（宽度相等）
-    })
+    }).map(width => (width > 0 ? width : 100))
   }
 
   /** table 总的宽度 */

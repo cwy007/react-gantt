@@ -20,6 +20,9 @@ export default function useDragResize(
     left: 0,
   });
   const initSizeRef = useRef(initSize);
+
+  // TODO ahook 3 useMemoizedFn
+  // https://ahooks.gitee.io/zh-CN/hooks/use-memoized-fn
   const handleMouseMove = usePersistFn(async (event: MouseEvent) => {
     const distance = event.clientX - positionRef.current.left;
     let width = initSizeRef.current.width + distance;
@@ -31,11 +34,13 @@ export default function useDragResize(
     }
     handleResize({ width });
   });
+
   const handleMouseUp = useCallback(() => {
     window.removeEventListener('mousemove', handleMouseMove);
     window.removeEventListener('mouseup', handleMouseUp);
     setResizing(false);
   }, [handleMouseMove]);
+
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       positionRef.current.left = event.clientX;
@@ -46,5 +51,6 @@ export default function useDragResize(
     },
     [handleMouseMove, handleMouseUp, initSize]
   );
+
   return [handleMouseDown, resizing];
 }

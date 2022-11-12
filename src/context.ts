@@ -10,6 +10,7 @@ import { DefaultRecordType, Gantt } from './types'
  * 哪些数据应该放在 context 中
  */
 export interface GanttContext<RecordType = DefaultRecordType> {
+  /** 默认值 gantt */
   prefixCls: string
   store: GanttStore
   /** 返回默认条样式 */
@@ -51,6 +52,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   renderBarThumb?: (item: Gantt.Record<RecordType>, type: 'left' | 'right') => React.ReactNode
   /** 行点击事件 */
   onBarClick?: (record: Gantt.Record<RecordType>) => void
+  /** 是否可以显示/隐藏左侧的table，默认值：true */
   tableCollapseAble: boolean
   scrollTop: boolean | React.CSSProperties
   /** 是否展示左右侧内容 */

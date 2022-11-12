@@ -5,6 +5,7 @@ import useDragResize from '../../hooks/useDragResize'
 import Context from '../../context'
 import './index.less'
 
+/** 拖拽改变甘特图大小的分割线 */
 const Divider: React.FC = () => {
   const { store, tableCollapseAble, prefixCls } = useContext(Context)
   const prefixClsDivider = `${prefixCls}-divider`

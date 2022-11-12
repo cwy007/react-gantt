@@ -82,6 +82,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   renderInvalidBar?: GanttContext<RecordType>['renderInvalidBar']
   renderBarThumb?: GanttContext<RecordType>['renderBarThumb']
   onBarClick?: GanttContext<RecordType>['onBarClick']
+  /** 是否可以显示/隐藏左侧的table */
   tableCollapseAble?: GanttContext<RecordType>['tableCollapseAble']
   scrollTop?: GanttContext<RecordType>['scrollTop']
   /** 是否禁用图表 */

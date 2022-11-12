@@ -116,6 +116,7 @@ class GanttStore {
   /** 甘特图是否在水平移动 */
   @observable scrolling = false
 
+  /** tableBody 和 gantt 的父元素 main 元素的滚动高度 */
   @observable scrollTop = 0
 
   @observable collapse = false
@@ -140,8 +141,10 @@ class GanttStore {
   /** 当前视图配置 */
   @observable sightConfig: Gantt.SightConfig
 
+  /** 是否显示鼠标hover效果 */
   @observable showSelectionIndicator = false
 
+  /** 鼠标hover效果模拟 div 元素 top 属性 */
   @observable selectionIndicatorTop = 0
 
   @observable dragging: Gantt.Bar | null = null
@@ -156,6 +159,7 @@ class GanttStore {
 
   gestureKeyPress = false
 
+  /** tableBody 和 gantt 的父元素 main */
   mainElementRef = createRef<HTMLDivElement>()
 
   chartElementRef = createRef<HTMLDivElement>()

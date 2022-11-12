@@ -54,6 +54,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   onBarClick?: (record: Gantt.Record<RecordType>) => void
   /** 是否可以显示/隐藏左侧的table，默认值：true */
   tableCollapseAble: boolean
+  /** 返回顶部按钮，默认值为true，可以通过这个参数设置返回按钮的样式 */
   scrollTop: boolean | React.CSSProperties
   /** 是否展示左右侧内容 */
   alwaysShowTaskBar?: boolean

@@ -10,6 +10,7 @@ const SelectionIndicator: React.FC = () => {
   const { store, prefixCls } = useContext(Context);
   const { showSelectionIndicator, selectionIndicatorTop, rowHeight } = store;
   const prefixClsSelectionIndicator = `${prefixCls}-selection-indicator`;
+
   return showSelectionIndicator ? (
     <div
       className={prefixClsSelectionIndicator}
@@ -20,4 +21,5 @@ const SelectionIndicator: React.FC = () => {
     />
   ) : null;
 };
+
 export default observer(SelectionIndicator);

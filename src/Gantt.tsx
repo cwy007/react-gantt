@@ -86,6 +86,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   onBarClick?: GanttContext<RecordType>['onBarClick']
   /** 是否可以显示/隐藏左侧的table */
   tableCollapseAble?: GanttContext<RecordType>['tableCollapseAble']
+  /** 返回顶部按钮，默认值为true，可以通过这个参数设置返回按钮的样式 */
   scrollTop?: GanttContext<RecordType>['scrollTop']
   /** 是否禁用图表 */
   disabled?: boolean
@@ -246,8 +247,8 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
 
         {/*
           返回今日按钮
-            当今天没有显示在甘特图的可见区域时，会显示今天按钮，
-            点击今天按钮，甘特图中会显示今天对应的坐标
+          当今天没有显示在甘特图的可见区域时，会显示今天按钮
+          点击今天按钮，甘特图中会显示今天对应的坐标
         */}
         {showBackToday && <TimeIndicator />}
 
@@ -257,7 +258,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
         {/* 甘特图下方的滚动条 */}
         <ScrollBar />
 
-        {/* 展示视图切换 */}
+        {/* 返回顶部按钮 */}
         {scrollTop && <ScrollTop />}
       </Body>
     </Context.Provider>

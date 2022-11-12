@@ -127,6 +127,7 @@ const TableRows = () => {
   )
 }
 const ObserverTableRows = observer(TableRows)
+
 const TableBorders = () => {
   const { store, prefixCls } = useContext(Context)
   const { columns } = store
@@ -157,6 +158,8 @@ const ObserverTableBorders = observer(TableBorders)
 
 const TableBody: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
+  const prefixClsTableBody = `${prefixCls}-table-body`
+
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.persist()
@@ -164,10 +167,11 @@ const TableBody: React.FC = () => {
     },
     [store]
   )
+
   const handleMouseLeave = useCallback(() => {
     store.handleMouseLeave()
   }, [store])
-  const prefixClsTableBody = `${prefixCls}-table-body`
+
   return (
     <div
       className={prefixClsTableBody}
@@ -183,4 +187,5 @@ const TableBody: React.FC = () => {
     </div>
   )
 }
+
 export default observer(TableBody)

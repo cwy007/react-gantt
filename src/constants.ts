@@ -1,5 +1,7 @@
-export const ROW_HEIGHT = 40
-export const HEADER_HEIGHT = 56
+export const ROW_HEIGHT = 38 // TODO 行高
+// export const ROW_HEIGHT = 40
+export const HEADER_HEIGHT = 48
+// export const HEADER_HEIGHT = 56
 export const BAR_HEIGHT = 8
 export const TOP_PADDING = 0
 export const TABLE_INDENT = 30

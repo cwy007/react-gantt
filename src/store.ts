@@ -394,7 +394,7 @@ class GanttStore {
     return this.getColumnsWidth.reduce((width, item) => width + (item || 0), 0)
   }
 
-  // 内容区滚动区域域高度
+  /** 内容区滚动区域高度 */
   @computed get bodyScrollHeight() {
     let height = this.getBarList.length * this.rowHeight + TOP_PADDING
     if (height < this.bodyClientHeight) height = this.bodyClientHeight

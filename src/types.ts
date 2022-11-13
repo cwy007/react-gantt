@@ -61,50 +61,86 @@ export namespace Gantt {
     value: ESightValues
   }
 
+  /** Record -> Item -> Bar */
   export interface Bar<RecordType = DefaultRecordType> {
     key: React.Key
+    /** 格式化数据时设置的 content 字段 */
     label: string
+    /** 排期条宽度 */
     width: number
+    /** 排期条水平方向偏移量 */
     translateX: number
+    /** 排期条垂直方向偏移量 */
     translateY: number
-    stepGesture: string
+    /** start(开始）、moving(移动)、end(结束) */
+    stepGesture: 'start' | 'moving' | 'end'
+    /** 是否为有效时间区间 */
     invalidDateRange: boolean
+    /** 将横坐标 startX 转换为对应的日期格式 */
     dateTextFormat: (startX: number) => string
+    /** 开始时间和结束时间之间相差的天数 */
     getDateWidth: (startX: number, endX: number) => string
+    /** 格式化后的数据 */
     task: Item<RecordType>
+    /** 格式化前的数据 */
     record: Record<RecordType>
+    /** 默认值 false */
     loading: boolean
+    /** // TODO ?? */
     _group?: boolean
+    /** 是否折叠 */
     _collapsed: boolean
+    /** 表示子节点深度 */
     _depth: number
+    /** 任务下标位置 */
     _index?: number
+    /** 子任务数 */
     _childrenCount: number
+    /** 父任务数据 */
     _parent?: Item<RecordType>
   }
 
   /** 转换过的数据源 - 在组件内部使用 */
   export interface Item<RecordType = DefaultRecordType> {
+    /** 数据源对象 */
     record: Record<RecordType>
     key: React.Key
+    /** 开始时间 */
     startDate: string | null
+    /** 结束时间 */
     endDate: string | null
+    /** // TODO: ？？ */
     content: string
+    /** 是否是折叠状态 */
     collapsed: boolean
+    /** // TODO: ？？ */
     group?: boolean
+    /** 子项 */
     children?: Item<RecordType>[]
+    /** =========== 下面是扁平化后添加的属性 ============= */
+    /** 父级对象 */
     _parent?: Item<RecordType>
+    /** // TODO: ？？ */
     _bar?: Bar<RecordType>
+    /** 数据对应的层级深度：eg：第一层 0 */
     _depth?: number
+    /** 扁平后对应的索引 */
     _index?: number
   }
 
   /** 原有的数据源 - 组件的 data props */
   export type Record<RecordType = DefaultRecordType> = RecordType & {
+    /** // TODO: ？？ */
     group?: boolean
+    /** // TODO: ？？ */
     borderColor?: string
+    /** // TODO: ？？ */
     backgroundColor?: string
+    /** 是否是折叠状态 */
     collapsed?: boolean
+    /** 子项 */
     children?: Record<RecordType>[]
+    /** // TODO: ？？ */
     disabled?: boolean
   }
 

@@ -3,16 +3,25 @@ import { Gantt } from './types'
 /**
  * 将树形数据向下递归为一维数组
  *
- * @param {any} arr 数据源
+ * @param {any} array 格式化后的数据源
  */
 export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.Item | undefined): Gantt.Item[] {
   let index = 0
-  return array.reduce((flat: Gantt.Item[], item) => {
-    item._depth = depth
-    item._parent = parent
-    item._index = index
+  return array.reduce((prevArr: Gantt.Item[], item) => {
+    item._depth = depth // 数据对应的层级深度：eg：第一层 0
+    item._parent = parent // 父级对象
+    item._index = index // 扁平后对应的索引
     index += 1
-    return [...flat, item, ...(item.children && !item.collapsed ? flattenDeep(item.children, depth + 1, item) : [])]
+
+    return [
+      ...prevArr,
+      item,
+      ...(
+        item.children && !item.collapsed
+          ? flattenDeep(item.children, depth + 1, item)
+          : []
+      ),
+    ]
   }, [])
 }
 
@@ -61,10 +70,10 @@ export function transverseData(data: Gantt.Record[] = [], startDateKey: string, 
       key: genKey(), // TODO
       record,
       content: '',
-      group: record.group,
+      group: record.group, //
       startDate: record[startDateKey] || '',
       endDate: record[endDateKey] || '',
-      collapsed: record.collapsed || false,
+      collapsed: record.collapsed || false, // 是否是折叠起来的状态
       children: transverseData(record.children || [], startDateKey, endDateKey),
     }
     result.push(item)

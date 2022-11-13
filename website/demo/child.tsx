@@ -10,9 +10,9 @@ interface Data {
 
 const node = {
   name: '一个名称一个名称一个名称一个名称',
-  startDate: dayjs().format('YYYY-MM-DD'),
-  endDate: dayjs().add(1, 'week').format('YYYY-MM-DD'),
-  collapsed: true,
+  startDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+  endDate: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
+  collapsed: true, // 默认是折叠起来的
 }
 
 const childList = [

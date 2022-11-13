@@ -291,7 +291,7 @@ class GanttStore {
    * 图表宽度不能小于 MIN_VIEW_WIDTH
    */
   @action initWidth() {
-    this.tableWidth = this.totalColumnWidth // table 总的宽度
+    this.tableWidth = Math.max(this.totalColumnWidth, INIT_TABLE_WIDTH)
     // 如果屏幕宽度被拉大，table宽度不变，甘特图宽度变大
     this.viewWidth = this.width - this.tableWidth // gantt图宽度
     console.log('this.tableWidth-->', this.tableWidth)
@@ -375,7 +375,7 @@ class GanttStore {
     // 为1列时最小宽度为200
     // FIXME TODO: 原来组件这里是有bug的
     if (this.columns.length === 1 && (this.columns[0]?.width || 0) <= MIN_TABLE_WIDTH) {
-      return [Math.max(MIN_TABLE_WIDTH), this.tableWidth]
+      return [Math.max(MIN_TABLE_WIDTH, this.tableWidth)]
     }
 
     // columns 中指定的 width 和
@@ -726,14 +726,17 @@ class GanttStore {
   @computed get getBarList(): Gantt.Bar[] {
     const { pxUnitAmp, data } = this
     // 最小宽度
-    const minStamp = 11 * pxUnitAmp
+    // const minStamp = 11 * pxUnitAmp
     // TODO 去除高度读取
-    const height = 8
+    // const height = 8 // 排期条对应的高度
+    const height = 24 // FIXME: 排期条对应的高度
     const baseTop = TOP_PADDING + this.rowHeight / 2 - height / 2
     const topStep = this.rowHeight
 
-    const dateTextFormat = (startX: number) => dayjs(startX * pxUnitAmp).format('YYYY-MM-DD')
+    /** 将横坐标 startX 转换为对应的日期格式 */
+    const dateTextFormat = (startX: number) => dayjs(startX * pxUnitAmp).format('YYYY-MM-DD HH:mm:ss')
 
+    /** 开始时间和结束时间之间相差的天数 */
     const getDateWidth = (start: number, endX: number) => {
       const startDate = dayjs(start * pxUnitAmp)
       const endDate = dayjs(endX * pxUnitAmp)
@@ -742,24 +745,25 @@ class GanttStore {
 
     const flattenData = flattenDeep(data)
     const barList = flattenData.map((item, index) => {
-      const valid = item.startDate && item.endDate
+      const valid = item.startDate && item.endDate // 存在起止时间
       let startAmp = dayjs(item.startDate || 0)
-        .startOf('day')
+        // .startOf('day') // TODO: 时间精度为 hour 时如何处理
         .valueOf()
       let endAmp = dayjs(item.endDate || 0)
-        .endOf('day')
+        // .endOf('day')
         .valueOf()
 
       // 开始结束日期相同默认一天
-      if (Math.abs(endAmp - startAmp) < minStamp) {
-        startAmp = dayjs(item.startDate || 0)
-          .startOf('day')
-          .valueOf()
-        endAmp = dayjs(item.endDate || 0)
-          .endOf('day')
-          .add(minStamp, 'millisecond')
-          .valueOf()
-      }
+      // if (Math.abs(endAmp - startAmp) < minStamp) {
+      //   console.log('minStamp', minStamp)
+      //   startAmp = dayjs(item.startDate || 0)
+      //     .startOf('day')
+      //     .valueOf()
+      //   endAmp = dayjs(item.endDate || 0)
+      //     .endOf('day')
+      //     .add(minStamp, 'millisecond')
+      //     .valueOf()
+      // }
 
       const width = valid ? (endAmp - startAmp) / pxUnitAmp : 0
       const translateX = valid ? startAmp / pxUnitAmp : 0
@@ -774,8 +778,8 @@ class GanttStore {
         translateY,
         width,
         label: item.content,
-        stepGesture: 'end', // start(开始）、moving(移动)、end(结束)
-        invalidDateRange: !item.endDate || !item.startDate, // 是否为有效时间区间
+        stepGesture: 'end',
+        invalidDateRange: !item.endDate || !item.startDate,
         dateTextFormat,
         getDateWidth,
         loading: false,
@@ -783,10 +787,10 @@ class GanttStore {
         _collapsed: item.collapsed, // 是否折叠
         _depth: item._depth as number, // 表示子节点深度
         _index: item._index, // 任务下标位置
-        _parent, // 原任务数据
+        _parent, // 父任务数据
         _childrenCount: !item.children ? 0 : item.children.length, // 子任务
       }
-      item._bar = bar
+      item._bar = bar // TODO 怎么又备份一次
       return bar
     })
     // 进行展开扁平

@@ -9,7 +9,7 @@ const resolveCss = () => {
 }
 
 export default defineConfig({
-  title: ' ',
+  title: 'react-gantt',
   mode: 'site',
   resolve: {
     includes: ['./website'],

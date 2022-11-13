@@ -140,7 +140,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     showUnitSwitch = true, //
     unit,
     onRow, //
-    tableIndent = TABLE_INDENT, //
+    tableIndent = TABLE_INDENT, // 表格缩紧，默认值30
     expandIcon, //
     renderBar, //
     renderInvalidBar, //

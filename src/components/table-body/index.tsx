@@ -7,7 +7,9 @@ import RowToggler from './RowToggler'
 import './index.less'
 
 const TableRows = () => {
-  const { store, onRow, tableIndent, expandIcon, prefixCls, onExpand } = useContext(Context)
+  const {
+    store, onRow, tableIndent, expandIcon, prefixCls, onExpand,
+  } = useContext(Context)
   const { columns, rowHeight } = store
   const columnsWidth = store.getColumnsWidth
   const barList = store.getBarList
@@ -63,7 +65,7 @@ const TableRows = () => {
                   ...column.style,
                 }}
               >
-                {index === 0 &&
+                {index === 0 && (
                   // eslint-disable-next-line unicorn/no-new-array
                   new Array(bar._depth).fill(0).map((_, i) => (
                     <div
@@ -79,7 +81,8 @@ const TableRows = () => {
                         width: tableIndent * 1.5 + 5,
                       }}
                     />
-                  ))}
+                  ))
+                )}
                 {index === 0 && bar._childrenCount > 0 && (
                   <div
                     style={{
@@ -133,15 +136,18 @@ const TableBorders = () => {
   const { columns } = store
   const columnsWidth = store.getColumnsWidth
   const barList = store.getBarList
+  const prefixClsTableBody = `${prefixCls}-table-body`
+
   if (barList.length === 0) return null
 
-  const prefixClsTableBody = `${prefixCls}-table-body`
   return (
     <div role='none' className={`${prefixClsTableBody}-border_row`}>
       {columns.map((column, index) => (
         <div
           key={column.name}
-          className={`${prefixClsTableBody}-cell`}
+          className={classNames(`${prefixClsTableBody}-cell`, {
+            [`${prefixClsTableBody}-cell-width-0`]: columnsWidth[index] === 0
+          })}
           style={{
             width: columnsWidth[index],
             minWidth: column.minWidth,
@@ -168,6 +174,7 @@ const TableBody: React.FC = () => {
         height: store.bodyScrollHeight,
       }}
     >
+      {/* 显示对应列的border */}
       <ObserverTableBorders />
       <ObserverTableRows />
     </div>

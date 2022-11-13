@@ -195,8 +195,7 @@ class GanttStore {
     this.isRestDay = function_ || isRestDay
   }
 
-  @action
-  setData(data: Gantt.Record[], startDateKey: string, endDateKey: string) {
+  @action setData(data: Gantt.Record[], startDateKey: string, endDateKey: string) {
     this.startDateKey = startDateKey // 字段名称
     this.endDateKey = endDateKey // endDate 对应的字段名称
     this.originData = data // 数据源
@@ -217,24 +216,20 @@ class GanttStore {
     }
   }
 
-  @action
-  setRowCollapse(item: Gantt.Item, collapsed: boolean) {
+  @action setRowCollapse(item: Gantt.Item, collapsed: boolean) {
     item.collapsed = collapsed
     // this.barList = this.getBarList();
   }
 
-  @action
-  setOnUpdate(onUpdate: GanttProperties['onUpdate']) {
+  @action setOnUpdate(onUpdate: GanttProperties['onUpdate']) {
     this.onUpdate = onUpdate
   }
 
-  @action
-  setColumns(columns: Gantt.Column[]) {
+  @action setColumns(columns: Gantt.Column[]) {
     this.columns = columns
   }
 
-  @action
-  setDependencies(dependencies: Gantt.Dependence[]) {
+  @action  setDependencies(dependencies: Gantt.Dependence[]) {
     this.dependencies = dependencies
   }
 
@@ -243,8 +238,8 @@ class GanttStore {
     this.scrolling = true
     this.setTranslateX(translateX)
   }
-  @action
-  handlePanEnd() {
+
+  @action handlePanEnd() {
     this.scrolling = false
   }
 
@@ -341,7 +336,7 @@ class GanttStore {
   @computed get scrollLeft() {
     const rate = this.viewWidth / this.scrollWidth
     const currentDate = dayjs(this.translateAmp).toString()
-    console.log('currentDate', currentDate)
+    // console.log('currentDate', currentDate)
     // 默认滚动条在中间
     const half = (this.viewWidth - this.scrollBarWidth) / 2
     const viewScrollLeft =
@@ -382,9 +377,20 @@ class GanttStore {
     // 剩余宽度 - 当 table 被隐藏时 tableWidth 为0
     // 这时得到的 restWidth <= 0
     //
-    const restWidth = this.tableWidth - totalColumnWidth > 0 ? this.tableWidth - totalColumnWidth : 0
+    // const restWidth = this.tableWidth - totalColumnWidth > 0 ? this.tableWidth - totalColumnWidth : 0
+    let restWidth = this.tableWidth;
+
     return this.columns.map(column => {
-      if (column.width) return column.width
+      if (column.width && restWidth >= 0) {
+        if (column.width < restWidth) {
+          restWidth -= column.width;
+          return column.width
+        }
+
+        const columnWidth = restWidth;
+        restWidth = 0;
+        return columnWidth
+      }
 
       if (column.flex) return restWidth * (column.flex / totalFlex)
 
@@ -420,7 +426,7 @@ class GanttStore {
   /** 当前开始时间毫秒数 */
   @computed get translateAmp() {
     const { translateX } = this
-    console.log('translateX', translateX)
+    // console.log('translateX', translateX)
     return this.pxUnitAmp * translateX
   }
 
@@ -779,8 +785,7 @@ class GanttStore {
     return observable(barList)
   }
 
-  @action
-  handleWheel = (event: WheelEvent) => {
+  @action handleWheel = (event: WheelEvent) => {
     if (event.deltaX !== 0) {
       event.preventDefault()
       event.stopPropagation()
@@ -807,7 +812,7 @@ class GanttStore {
     this.scrollTop = scrollTop
   }, 100)
 
-  // 虚拟滚动
+  /** 虚拟滚动 */
   @computed get getVisibleRows() {
     const visibleHeight = this.bodyClientHeight
     // 多渲染几个，减少空白
@@ -840,8 +845,8 @@ class GanttStore {
     // 内容区高度
     const contentHeight = this.getBarList.length * this.rowHeight
     const offsetY = event.clientY - top + scrollTop
-    console.log('contentHeight-->', contentHeight)
-    console.log('offsetY-->', offsetY)
+    // console.log('contentHeight-->', contentHeight)
+    // console.log('offsetY-->', offsetY)
     if (offsetY - contentHeight > TOP_PADDING) {
       this.showSelectionIndicator = false
     } else {
@@ -863,8 +868,7 @@ class GanttStore {
     this.isPointerPress = true
   }
 
-  @action
-  handleDragEnd() {
+  @action handleDragEnd() {
     if (this.dragging) {
       this.dragging.stepGesture = 'end'
       this.dragging = null
@@ -873,32 +877,27 @@ class GanttStore {
     this.isPointerPress = false
   }
 
-  @action
-  handleInvalidBarLeave() {
+  @action handleInvalidBarLeave() {
     this.handleDragEnd()
   }
 
-  @action
-  handleInvalidBarHover(barInfo: Gantt.Bar, left: number, width: number) {
+  @action handleInvalidBarHover(barInfo: Gantt.Bar, left: number, width: number) {
     barInfo.translateX = left
     barInfo.width = width
     this.handleDragStart(barInfo, 'create')
   }
 
-  @action
-  handleInvalidBarDragStart(barInfo: Gantt.Bar) {
+  @action handleInvalidBarDragStart(barInfo: Gantt.Bar) {
     barInfo.stepGesture = 'moving'
   }
 
-  @action
-  handleInvalidBarDragEnd(barInfo: Gantt.Bar, oldSize: { width: number; x: number }) {
+  @action handleInvalidBarDragEnd(barInfo: Gantt.Bar, oldSize: { width: number; x: number }) {
     barInfo.invalidDateRange = false
     this.handleDragEnd()
     this.updateTaskDate(barInfo, oldSize, 'create')
   }
 
-  @action
-  updateBarSize(barInfo: Gantt.Bar, { width, x }: { width: number; x: number }) {
+  @action updateBarSize(barInfo: Gantt.Bar, { width, x }: { width: number; x: number }) {
     barInfo.width = width
     barInfo.translateX = Math.max(x, 0)
     barInfo.stepGesture = 'moving'
@@ -907,8 +906,7 @@ class GanttStore {
     return Math.round(ms / ONE_DAY_MS)
   }
   /** 更新时间 */
-  @action
-  async updateTaskDate(
+  @action async updateTaskDate(
     barInfo: Gantt.Bar,
     oldSize: { width: number; x: number },
     type: 'move' | 'left' | 'right' | 'create'

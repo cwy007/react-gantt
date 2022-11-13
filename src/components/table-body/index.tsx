@@ -5,6 +5,7 @@ import Context from '../../context'
 import { INIT_TABLE_WIDTH, TOP_PADDING } from '../../constants'
 import RowToggler from './RowToggler'
 import './index.less'
+import { getVerticalLineHeight } from '../../utils'
 
 /** table中的行 */
 const TableRows = () => {
@@ -31,7 +32,8 @@ const TableRows = () => {
     )
   }
 
-  console.log('columnsWidth', columnsWidth)
+  console.log('barList', barList)
+  console.log('count, start', count, start)
 
   return (
     <>
@@ -40,8 +42,9 @@ const TableRows = () => {
         const parent = bar._parent
         const parentItem = parent?._parent
         let isLastChild = false
-        if (parentItem?.children && parentItem.children[parentItem.children.length - 1] === bar._parent)
+        if (parentItem?.children && parentItem.children[parentItem.children.length - 1] === bar._parent) {
           isLastChild = true
+        }
 
         return (
           <div
@@ -69,6 +72,29 @@ const TableRows = () => {
                   ...column.style,
                 }}
               >
+                {/* index === 0 首列 */}
+                {/* {index === 0 && (
+                  // eslint-disable-next-line unicorn/no-new-array
+                  new Array(bar._depth).fill(0).map((_, i) => (
+                    <div
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={i}
+                      // className={classNames(`${prefixClsTableBody}-row-indentation`, {
+                      //   // TODO 隐藏掉多余的竖线
+                      //   [`${prefixClsTableBody}-row-indentation-hidden`]: isLastChild && i === bar._depth - 2,
+                      //   // [`${prefixClsTableBody}-row-indentation-hidden`]: isLastChild,
+                      //   [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
+                      // })}
+                      className={`${prefixClsTableBody}-row-indentation`}
+                      style={{
+                        top: -(rowHeight / 2) + 1, // - 向上偏移
+                        left: tableIndent * i + 15, // ++30
+                        width: tableIndent * 1.5 + 5, // 50
+                        height: `${getVerticalLineHeight(bar, barList) * 100}%`
+                      }}
+                    />
+                  ))
+                )} */}
                 {index === 0 && (
                   // eslint-disable-next-line unicorn/no-new-array
                   new Array(bar._depth).fill(0).map((_, i) => (
@@ -76,13 +102,17 @@ const TableRows = () => {
                       // eslint-disable-next-line react/no-array-index-key
                       key={i}
                       className={classNames(`${prefixClsTableBody}-row-indentation`, {
+                        // TODO 隐藏掉多余的竖线
                         [`${prefixClsTableBody}-row-indentation-hidden`]: isLastChild && i === bar._depth - 2,
                         [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
                       })}
+                      // className={classNames({
+                      //   [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
+                      // })}
                       style={{
-                        top: -(rowHeight / 2) + 1,
-                        left: tableIndent * i + 15,
-                        width: tableIndent * 1.5 + 5,
+                        top: -(rowHeight / 2) + 1, // - 向上偏移
+                        left: tableIndent * i + 15, // ++30
+                        width: tableIndent * 1.5 + 5, // 50
                       }}
                     />
                   ))
@@ -98,6 +128,7 @@ const TableRows = () => {
                       padding: 1,
                     }}
                   >
+                    {/* 自定义展开组件的图标，替换默认组件 */}
                     {expandIcon ? (
                       expandIcon({
                         level: bar._depth,
@@ -123,7 +154,7 @@ const TableRows = () => {
                   </div>
                 )}
                 <span className={`${prefixClsTableBody}-ellipsis`}>
-                  {column.render ? column.render(bar.record) : bar.record[column.name]}
+                  {column.render ? column.render(bar.record) : bar._depth + bar.record[column.name]}
                 </span>
               </div>
             ))}

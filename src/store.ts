@@ -216,7 +216,10 @@ class GanttStore {
     }
   }
 
+  /** 修改 data 中的数据 item 的 collapsed 属性 */
   @action setRowCollapse(item: Gantt.Item, collapsed: boolean) {
+    // getBarList 中用到 flattenDeep
+    // flattenDeep 中用到 collapsed 判断是否展开 children
     item.collapsed = collapsed
     // this.barList = this.getBarList();
   }
@@ -784,11 +787,11 @@ class GanttStore {
         getDateWidth,
         loading: false,
         _group: item.group,
-        _collapsed: item.collapsed, // 是否折叠
-        _depth: item._depth as number, // 表示子节点深度
-        _index: item._index, // 任务下标位置
-        _parent, // 父任务数据
-        _childrenCount: !item.children ? 0 : item.children.length, // 子任务
+        _collapsed: item.collapsed,
+        _depth: item._depth as number,
+        _index: item._index,
+        _parent,
+        _childrenCount: !item.children ? 0 : item.children.length,
       }
       item._bar = bar // TODO 怎么又备份一次
       return bar

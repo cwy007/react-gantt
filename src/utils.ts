@@ -1,5 +1,15 @@
 import { Gantt } from './types'
 
+/** 获取垂直辅助线的高度 */
+export const getVerticalLineHeight = (target: Gantt.Bar, barList: Gantt.Bar[]) => {
+  // const parent = target._parent;
+  const targetIndex = barList.indexOf(target)
+  const parentIndex = barList.findIndex(bar => bar._parent === target._parent)
+  // const list = barList.slice(parentIndex, targetIndex)
+  // return list.length;
+  return targetIndex - parentIndex
+}
+
 /**
  * 将树形数据向下递归为一维数组
  *

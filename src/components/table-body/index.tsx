@@ -6,6 +6,7 @@ import { INIT_TABLE_WIDTH, TOP_PADDING } from '../../constants'
 import RowToggler from './RowToggler'
 import './index.less'
 
+/** table中的行 */
 const TableRows = () => {
   const {
     store, onRow, tableIndent, expandIcon, prefixCls, onExpand,

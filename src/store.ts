@@ -130,7 +130,7 @@ class GanttStore {
   /** table 和 gantt 容器的宽度 */
   @observable width: number
 
-  /** table 和 gantt 容器的高度 */
+  /** gantt-body 元素的高度 */
   @observable height: number
 
   @observable bodyWidth: number
@@ -362,7 +362,7 @@ class GanttStore {
 
   /** 内容区滚动高度 */
   @computed get bodyClientHeight() {
-    // 1是边框
+    // 1是边框 - gantt-body下边框
     return this.height - HEADER_HEIGHT - 1
   }
 
@@ -721,7 +721,7 @@ class GanttStore {
   }
 
   /**
-   *
+   * Item -> Bar
    */
   @computed get getBarList(): Gantt.Bar[] {
     const { pxUnitAmp, data } = this
@@ -824,15 +824,19 @@ class GanttStore {
     this.scrollTop = scrollTop
   }, 100)
 
-  /** 虚拟滚动 */
+  /** 虚拟滚动：可见行数 + 10 */
   @computed get getVisibleRows() {
-    const visibleHeight = this.bodyClientHeight
-    // 多渲染几个，减少空白
+    const visibleHeight = this.bodyClientHeight // 页面可见的甘特图高度（不包含时间轴）
+    // 多渲染10个，减少空白
     const visibleRowCount = Math.ceil(visibleHeight / this.rowHeight) + 10
 
+    // 向上滚动5行距离后，start值开始递增
     const start = Math.max(Math.ceil(this.scrollTop / this.rowHeight) - 5, 0)
+
     return {
+      /** 数据起点 */
       start,
+      /** 数据长度 */
       count: visibleRowCount,
     }
   }

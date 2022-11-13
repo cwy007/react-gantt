@@ -37,16 +37,18 @@
 
 .@{gantt-prefix}-shadow {
   position: absolute;
-  top: 4px;
+  // top: 4px;
+  top: 0;
   right: 0;
   width: 90px;
-  height: 48px;
+  // height: 48px;
+  height: 56px;
   z-index: 0;
   transition: box-shadow 0.5s
 }
 
 .@{gantt-prefix}-shadow.@{gantt-prefix}-scrolling {
-  box-shadow: -3px 0 7px 0 #e5e5e5
+  box-shadow: -3px 3px 7px 0 #e5e5e5
 }
 
 .@{gantt-prefix}-trigger {
@@ -65,7 +67,12 @@
   cursor: pointer;
   width: 90px;
   z-index: 1;
-  transition: color 0.2s
+  transition: color 0.2s, opacity 0.2s;
+  opacity: 1;
+
+  &:not(:hover) {
+    opacity: 0.9;
+  }
 }
 
 .@{gantt-prefix}-trigger:hover {

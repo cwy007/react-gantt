@@ -15,7 +15,7 @@ import find from 'lodash/find'
 import throttle from 'lodash/throttle'
 import { action, computed, observable, runInAction, toJS } from 'mobx'
 import React, { createRef } from 'react'
-import { HEADER_HEIGHT, INIT_TABLE_WIDTH, INIT_VIEW_WIDTH, TOP_PADDING } from './constants'
+import { HEADER_HEIGHT, INIT_TABLE_WIDTH, INIT_VIEW_WIDTH, MIN_TABLE_WIDTH, MIN_VIEW_WIDTH, TOP_PADDING } from './constants'
 import { GanttProps as GanttProperties } from './Gantt'
 import { Gantt } from './types'
 import { flattenDeep, transverseData } from './utils'
@@ -266,9 +266,15 @@ class GanttStore {
   @action handleResizeTableWidth(width: number) {
     const columnsWidthArr = this.columns.filter(column => column.width > 0)
     if (this.columns.length === columnsWidthArr.length) return
-
     this.tableWidth = width
     this.viewWidth = this.width - this.tableWidth
+
+    // TODO
+    // 图表宽度不能小于 MIN_VIEW_WIDTH
+    if (this.viewWidth < MIN_VIEW_WIDTH) {
+      this.viewWidth = MIN_VIEW_WIDTH
+      this.tableWidth = this.width - this.viewWidth
+    }
     // if (width <= this.totalColumnWidth) {
     //   this.tableWidth = width
     //   this.viewWidth = this.width - this.tableWidth
@@ -282,7 +288,7 @@ class GanttStore {
   }
 
   /**
-   * 图表宽度不能小于 200
+   * 图表宽度不能小于 MIN_VIEW_WIDTH
    */
   @action initWidth() {
     this.tableWidth = this.totalColumnWidth // table 总的宽度
@@ -290,9 +296,9 @@ class GanttStore {
     this.viewWidth = this.width - this.tableWidth // gantt图宽度
     console.log('this.tableWidth-->', this.tableWidth)
 
-    // 图表宽度不能小于 200
-    if (this.viewWidth < 200) {
-      this.viewWidth = 200
+    // 图表宽度不能小于 MIN_VIEW_WIDTH
+    if (this.viewWidth < MIN_VIEW_WIDTH) {
+      this.viewWidth = MIN_VIEW_WIDTH
       this.tableWidth = this.width - this.viewWidth
     }
   }
@@ -368,8 +374,9 @@ class GanttStore {
   @computed get getColumnsWidth(): number[] {
     // 为1列时最小宽度为200
     // FIXME TODO: 原来组件这里是有bug的
-    // undefined < 200 -> false
-    if (this.columns.length === 1 && (this.columns[0]?.width || 0) < 200) return [200]
+    if (this.columns.length === 1 && (this.columns[0]?.width || 0) <= MIN_TABLE_WIDTH) {
+      return [Math.max(MIN_TABLE_WIDTH), this.tableWidth]
+    }
 
     // columns 中指定的 width 和
     const totalColumnWidth = this.columns.reduce((width, item) => width + (item.width || 0), 0)
@@ -379,7 +386,7 @@ class GanttStore {
     // 这时得到的 restWidth <= 0
     //
     // const restWidth = this.tableWidth - totalColumnWidth > 0 ? this.tableWidth - totalColumnWidth : 0
-    let restWidth = this.tableWidth || INIT_TABLE_WIDTH;
+    let restWidth = Math.max(this.tableWidth, INIT_TABLE_WIDTH);
 
     return this.columns.map(column => {
       if (column.width && restWidth >= 0) {

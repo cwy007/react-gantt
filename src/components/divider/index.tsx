@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import useDragResize from '../../hooks/useDragResize'
 import Context from '../../context'
 import './index.less'
+import { MIN_TABLE_WIDTH } from '../../constants'
 
 /** 拖拽改变甘特图大小的分割线 */
 const Divider: React.FC = () => {
@@ -31,8 +32,9 @@ const Divider: React.FC = () => {
     initSize: {
       width: tableWidth, // 初始宽度
     },
-    minWidth: 200, // 最小宽度
-    maxWidth: store.width * 0.6, // 最大宽度
+    minWidth: MIN_TABLE_WIDTH, // 最小宽度
+    // TODO
+    // maxWidth: store.width * 0.6, // 最大宽度
   })
 
   return (
@@ -42,7 +44,8 @@ const Divider: React.FC = () => {
         [`${prefixClsDivider}_only`]: !tableCollapseAble,
       })}
       style={{ left: left - 1 }} // position absolute
-      onMouseDown={tableWidth === 0 ? undefined : handleMouseDown}
+      onMouseDown={handleMouseDown}
+      // onMouseDown={tableWidth === 0 ? undefined : handleMouseDown}
     >
       {/* 拖拽时改变鼠标的样式 */}
       {resizing && (

@@ -51,12 +51,12 @@ const App = () => (
         {
           name: 'name',
           label: '名称',
-          width: 200,
+          // width: 200,
         },
         {
           name: 'startDate',
           label: '开始时间',
-          width: 100,
+          // width: 100,
         },
         {
           name: 'endDate',

@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import Context from '../../context'
-import { TOP_PADDING } from '../../constants'
+import { INIT_TABLE_WIDTH, TOP_PADDING } from '../../constants'
 import RowToggler from './RowToggler'
 import './index.less'
 
@@ -29,6 +29,8 @@ const TableRows = () => {
       </div>
     )
   }
+
+  console.log('columnsWidth', columnsWidth)
 
   return (
     <>
@@ -171,7 +173,7 @@ const TableBody: React.FC = () => {
     <div
       className={prefixClsTableBody}
       style={{
-        width: store.tableWidth,
+        width: Math.max(store.tableWidth, INIT_TABLE_WIDTH),
         height: store.bodyScrollHeight,
       }}
     >

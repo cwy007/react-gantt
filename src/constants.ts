@@ -8,5 +8,9 @@ export const TABLE_INDENT = 30
 export const MIN_VIEW_RATE = 0.5
 // table 初始宽度
 export const INIT_TABLE_WIDTH = 500
+// table 最小宽度
+export const MIN_TABLE_WIDTH = 200 // FIXME: 为0时，多级结构显示异常
 // gantt 初始宽度
 export const INIT_VIEW_WIDTH = 704
+// gantt 最小宽度
+export const MIN_VIEW_WIDTH = 90

@@ -34,7 +34,12 @@ const TimeAxisScaleSelect: React.FC = () => {
   const isSelected = useCallback((key: string) => key === selected, [selected])
   return (
     <div className={`${prefixCls}-time-axis-scale-select`} ref={ref}>
-      <div role='none' className={`${prefixCls}-trigger`} onClick={handleClick}>
+      <div
+       role='none'
+       className={`${prefixCls}-trigger`}
+       onClick={handleClick}
+       style={{ opacity: visible ? 1 : undefined }}
+      >
         <div className={`${prefixCls}-text`}>{sightConfig.label}</div>
         <span className='dropdown-icon'>
           <svg id='at-triangle-down-s' viewBox='0 0 1024 1024'>

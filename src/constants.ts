@@ -6,3 +6,7 @@ export const TOP_PADDING = 0 // table中首行对应的 top 属性增加值 - �
 export const TABLE_INDENT = 30
 // 图表最小比例
 export const MIN_VIEW_RATE = 0.5
+// table 初始宽度
+export const INIT_TABLE_WIDTH = 500
+// gantt 初始宽度
+export const INIT_VIEW_WIDTH = 704

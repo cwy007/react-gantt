@@ -15,7 +15,7 @@ import find from 'lodash/find'
 import throttle from 'lodash/throttle'
 import { action, computed, observable, runInAction, toJS } from 'mobx'
 import React, { createRef } from 'react'
-import { HEADER_HEIGHT, TOP_PADDING } from './constants'
+import { HEADER_HEIGHT, INIT_TABLE_WIDTH, INIT_VIEW_WIDTH, TOP_PADDING } from './constants'
 import { GanttProps as GanttProperties } from './Gantt'
 import { Gantt } from './types'
 import { flattenDeep, transverseData } from './utils'
@@ -86,10 +86,10 @@ class GanttStore {
     const sightConfig = customSights.length ? customSights[0] : viewTypeList[0]
     const translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000)
     const bodyWidth = this.width
-    const viewWidth = 704
-    const tableWidth = 500
-    this.viewWidth = viewWidth
-    this.tableWidth = tableWidth
+    // const viewWidth = 704
+    // const tableWidth = 500
+    this.viewWidth = INIT_VIEW_WIDTH
+    this.tableWidth = INIT_TABLE_WIDTH
     this.translateX = translateX
     this.sightConfig = sightConfig
     this.bodyWidth = bodyWidth
@@ -288,6 +288,7 @@ class GanttStore {
     this.tableWidth = this.totalColumnWidth // table 总的宽度
     // 如果屏幕宽度被拉大，table宽度不变，甘特图宽度变大
     this.viewWidth = this.width - this.tableWidth // gantt图宽度
+    console.log('this.tableWidth-->', this.tableWidth)
 
     // 图表宽度不能小于 200
     if (this.viewWidth < 200) {
@@ -378,7 +379,7 @@ class GanttStore {
     // 这时得到的 restWidth <= 0
     //
     // const restWidth = this.tableWidth - totalColumnWidth > 0 ? this.tableWidth - totalColumnWidth : 0
-    let restWidth = this.tableWidth;
+    let restWidth = this.tableWidth || INIT_TABLE_WIDTH;
 
     return this.columns.map(column => {
       if (column.width && restWidth >= 0) {

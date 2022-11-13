@@ -13,9 +13,9 @@ const TableRows = () => {
   const { columns, rowHeight } = store
   const columnsWidth = store.getColumnsWidth
   const barList = store.getBarList
-
   const { count, start } = store.getVisibleRows
   const prefixClsTableBody = `${prefixCls}-table-body`
+
   if (barList.length === 0) {
     return (
       <div
@@ -29,6 +29,7 @@ const TableRows = () => {
       </div>
     )
   }
+
   return (
     <>
       {barList.slice(start, start + count).map((bar, rowIndex) => {

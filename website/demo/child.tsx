@@ -13,6 +13,7 @@ const node = {
   startDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
   endDate: dayjs().add(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
   collapsed: false, // 默认是折叠起来的
+  // group: true // TODO
 }
 
 const childList = [

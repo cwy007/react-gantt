@@ -32,6 +32,7 @@ export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.
   }, [])
 }
 
+/** 获取起始偏移量和最大宽度 */
 export function getMaxRange(bar: Gantt.Bar) {
   let minTranslateX = 0
   let maxTranslateX = 0

@@ -13,6 +13,7 @@ const barH = 8
 let startX = 0
 const renderInvalidBarDefault = element => element
 
+/**  */
 const InvalidTaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const { store, prefixCls, renderInvalidBar = renderInvalidBarDefault } = useContext(Context)
   const triggerRef = useRef<HTMLDivElement>(null)
@@ -138,4 +139,5 @@ const InvalidTaskBar: React.FC<TaskBarProps> = ({ data }) => {
     </DragResize>
   )
 }
+
 export default observer(InvalidTaskBar)

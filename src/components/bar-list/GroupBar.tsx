@@ -11,10 +11,12 @@ interface GroupBarProps {
 }
 const height = 8;
 
+/** group 为 true 的行渲染的排期区间 bar */
 const GroupBar: React.FC<GroupBarProps> = ({ data }) => {
   const { prefixCls, renderGroupBar } = useContext(Context);
   const { translateY } = data;
   const { translateX, width } = getMaxRange(data);
+
   return (
     <div
       role="none"

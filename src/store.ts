@@ -30,6 +30,7 @@ dayjs.extend(isLeapYear)
 
 /** 一天对应的毫秒数 */
 export const ONE_DAY_MS = 86400000
+export const ONE_HOUR_MS = 3600000 // TODO
 
 /**
  * 视图类型：日视图、周视图、月视图、季视图、年视图

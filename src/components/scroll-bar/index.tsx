@@ -3,6 +3,7 @@ import { usePersistFn } from 'ahooks'
 import { observer } from 'mobx-react-lite'
 import Context from '../../context'
 import './index.less'
+import classNames from 'classnames'
 
 /** 甘特图下方的滚动条 */
 const ScrollBar: React.FC = () => {
@@ -35,6 +36,7 @@ const ScrollBar: React.FC = () => {
 
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      event.stopPropagation();
       positionRef.current.left = event.clientX // 初始坐标
       positionRef.current.translateX = store.translateX // 当前平移距离
       window.addEventListener('mousemove', handleMouseMove)
@@ -43,6 +45,8 @@ const ScrollBar: React.FC = () => {
     },
     [handleMouseMove, handleMouseUp, store.translateX]
   )
+
+  console.log('resizing-->', resizing)
 
   return (
     <div
@@ -68,7 +72,9 @@ const ScrollBar: React.FC = () => {
 
       {/*  */}
       <div
-        className={`${prefixClsScrollBar}-thumb`}
+        className={classNames(`${prefixClsScrollBar}-thumb`, {
+          [`${prefixClsScrollBar}-thumb-resizing`]: resizing,
+        })}
         style={{
           width,
           left: store.scrollLeft,

@@ -6,14 +6,32 @@
   bottom: 0;
   left: 16px;
   height: 12px;
+  z-index: 25;
+  // border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
 
   &-thumb {
     position: absolute;
     height: 100%;
-    border-radius: 4px;
-    background-color: #262626;
-    opacity: 0.2;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.15);
     cursor: pointer;
     will-change: transform;
+    height: 6px;
+
+    &:hover {
+      height: 12px;
+      border-radius: 6px;
+    }
+  }
+
+  &-thumb-resizing {
+    height: 12px;
+    border-radius: 6px;
   }
 }

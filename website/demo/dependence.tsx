@@ -38,7 +38,7 @@ const dependencies: Gantt.Dependence[] = [
   {
     from: '2',
     to: '3',
-    type: 'finish_start',
+    type: 'start_start',
   },
 ]
 

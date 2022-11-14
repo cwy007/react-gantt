@@ -150,6 +150,8 @@ export namespace Gantt {
     children?: Record<RecordType>[]
     /** // TODO: ？？ */
     disabled?: boolean
+    /** id 依赖结构中会使用到 */
+    id?: string | number
   }
 
   export type ColumnAlign = 'center' | 'right' | 'left'
@@ -171,7 +173,7 @@ export namespace Gantt {
     align?: ColumnAlign
   }
 
-  /** */
+  /** 依赖类型 */
   export type DependenceType =
    'start_finish' // TODO
    | 'finish_start'
@@ -180,8 +182,11 @@ export namespace Gantt {
 
   /** 依赖 */
   export interface Dependence {
+    /** 数据源id */
     from: string
+    /** 数据源id */
     to: string
+    /** 依赖类型 */
     type: DependenceType
   }
 }

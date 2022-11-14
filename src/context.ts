@@ -28,6 +28,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   }
   /** 表格缩进 */
   tableIndent: number
+  /** 排期区块的高度 */
   barHeight: number
   /** 展开子节点图表 */
   expandIcon?: ({

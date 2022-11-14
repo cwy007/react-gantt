@@ -80,6 +80,7 @@ const Chart: React.FC = () => {
         {/* 拖动时的提示条 */}
         <DragPresent />
 
+        {/* 依赖路径 */}
         <Dependencies />
       </svg>
 

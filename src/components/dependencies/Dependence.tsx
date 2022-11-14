@@ -5,8 +5,9 @@ import Context from '../../context'
 import { Gantt } from '../../types'
 import styles from './Dependence.less'
 
-const spaceX = 10
-const spaceY = 10
+const spaceX = 10 // 水平短线距离
+const spaceY = 10 // 垂直短线距离
+
 interface DependenceProps {
   data: Gantt.Dependence
 }
@@ -26,6 +27,7 @@ function getPoints(from: Point, to: Point, type: Gantt.DependenceType) {
   const { x: fromX, y: fromY } = from
   const { x: toX, y: toY } = to
   const sameSide = type === 'finish_finish' || type === 'start_start'
+
   // 同向，只需要两个关键点
   if (sameSide) {
     if (type === 'start_start') {
@@ -39,8 +41,8 @@ function getPoints(from: Point, to: Point, type: Gantt.DependenceType) {
       { x: Math.max(fromX + spaceX, toX + spaceX), y: toY },
     ]
   }
-  // 不同向，需要四个关键点
 
+  // 不同向，需要四个关键点
   return [
     { x: type === 'finish_start' ? fromX + spaceX : fromX - spaceX, y: fromY },
     {
@@ -54,6 +56,8 @@ function getPoints(from: Point, to: Point, type: Gantt.DependenceType) {
     { x: type === 'finish_start' ? toX - spaceX : toX + spaceX, y: toY },
   ]
 }
+
+/** 依赖路径 */
 const Dependence: React.FC<DependenceProps> = ({ data }) => {
   const { store, barHeight } = useContext(Context)
   const { from, to, type } = data
@@ -63,18 +67,28 @@ const Dependence: React.FC<DependenceProps> = ({ data }) => {
   if (!fromBar || !toBar) return null
 
   const posY = barHeight / 2
+  /**
+   * start 为 fromBar 左边或右边中心点
+   *
+   * end 为 toBar 左边或右边中心点
+   */
   const [start, end] = (() => [
     {
-      x: type === 'finish_finish' || type === 'finish_start' ? fromBar.translateX + fromBar.width : fromBar.translateX,
+      x: type === 'finish_finish' || type === 'finish_start'
+        ? fromBar.translateX + fromBar.width
+        : fromBar.translateX,
       y: fromBar.translateY + posY,
     },
     {
-      x: type === 'finish_finish' || type === 'start_finish' ? toBar.translateX + toBar.width : toBar.translateX,
+      x: type === 'finish_finish' || type === 'start_finish'
+        ? toBar.translateX + toBar.width
+        : toBar.translateX,
       y: toBar.translateY + posY,
     },
   ])()
   const points = [...getPoints(start, end, type), end]
   const endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1
+
   return (
     <g stroke='#f87872' className={styles['task-dependency-line']}>
       <path
@@ -87,6 +101,8 @@ const Dependence: React.FC<DependenceProps> = ({ data }) => {
         strokeWidth='1'
         fill='none'
       />
+
+      {/* 画箭头 */}
       <path
         name='arrow'
         strokeWidth='1'
@@ -100,4 +116,5 @@ const Dependence: React.FC<DependenceProps> = ({ data }) => {
     </g>
   )
 }
+
 export default observer(Dependence)

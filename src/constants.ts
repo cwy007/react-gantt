@@ -1,12 +1,19 @@
-export const ROW_HEIGHT = 38 // TODO 行高
-// export const ROW_HEIGHT = 40
+/** 行高 */
+export const ROW_HEIGHT = 38
+
 /** 表头的高度 */
 export const HEADER_HEIGHT = 48
-export const BAR_HEIGHT = 8
+
+/** === 排期区块 === */
+export const PARENT_BAR_HEIGHT = 8 // 父项
+export const BAR_HEIGHT = 24
+
 export const TOP_PADDING = 0 // table中首行对应的 top 属性增加值 - 首行距离外部容器组件顶部的距离增量
 export const TABLE_INDENT = 30
+
 // 图表最小比例
 export const MIN_VIEW_RATE = 0.5
+
 // table 初始宽度
 export const INIT_TABLE_WIDTH = 500
 // table 最小宽度

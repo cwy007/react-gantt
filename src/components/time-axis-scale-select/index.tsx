@@ -57,7 +57,7 @@ const TimeAxisScaleSelect: React.FC = () => {
           <div
             className={classNames('next-overlay-inner')}
             aria-hidden='false'
-            style={{ position: 'absolute', right: 15, top: 60 }}
+            style={{ position: 'absolute', right: 15, top: 52 }}
           >
             <div className='next-loading-wrap'>
               <ul role='listbox' className={classNames('next-menu')} aria-multiselectable='false'>

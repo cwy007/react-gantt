@@ -18,7 +18,7 @@ const Button = ({
   children: React.ReactNode
   onClick: React.MouseEventHandler<HTMLButtonElement>
 }) => (
-  <button onClick={onClick} style={active ? { background: '#096dd9', color: '#fff' } : {}} {...resetProps}>
+  <button onClick={onClick} style={active ? { background: '#1463FF', color: '#fff' } : {}} {...resetProps}>
     {children}
   </button>
 )

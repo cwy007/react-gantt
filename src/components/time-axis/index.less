@@ -2,7 +2,7 @@
 @time-axis-prefix-cls: ~'@{gantt-prefix}-time-axis';
 
 .@{time-axis-prefix-cls} {
-  height: 56px;
+  height: 48px;
   position: absolute;
   top: 0;
   user-select: none;
@@ -14,27 +14,38 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 56px;
+    height: 48px;
     pointer-events: none;
     user-select: none;
     will-change: transform;
   }
   &-today {
-    background-color: #2c7ef8;
-    border-radius: 50%;
+    background-color: #1463FF;
     color: #fff;
+
+    &:before {
+      content: '';
+      position: absolute;
+      height: 5px;
+      left: 15px;
+      width: 1px;
+      bottom: -2px;
+      background-color: #1463FF;
+    }
   }
 
   &-major {
     position: absolute;
     overflow: hidden;
     box-sizing: content-box;
-    height: 28px;
+    // height: 28px;
+    height: 24px;
     border-right: 1px solid #f0f0f0;
     font-weight: 400;
     text-align: left;
     font-size: 13px;
-    line-height: 28px;
+    // line-height: 28px;
+    line-height: 24px;
 
     &-label {
       overflow: hidden;
@@ -45,15 +56,25 @@
 
   &-minor {
     position: absolute;
-    top: 27px;
+    top: 24px;
     box-sizing: content-box;
-    height: 28px;
+    // height: 28px;
+    height: 23px;
     border-top: 1px solid #f0f0f0;
     border-right: 1px solid #f0f0f0;
     text-align: center;
     font-size: 12px;
-    line-height: 28px;
+    // line-height: 28px;
+    height: 23px;
     color: #202d40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-label {
+      flex: 1;
+    }
+
     &.weekends {
       background-color: hsla(0, 0%, 96.9%, 0.5);
     }

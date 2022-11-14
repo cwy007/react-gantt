@@ -10,6 +10,7 @@ const BarList: React.FC = () => {
   const { store } = useContext(Context)
   const barList = store.getBarList
   const { count, start } = store.getVisibleRows
+
   return (
     <>
       {barList.slice(start, start + count).map(bar => {

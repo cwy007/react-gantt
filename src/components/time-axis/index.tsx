@@ -7,22 +7,22 @@ import Context from '../../context'
 
 import './index.less'
 
+/** 甘特图上面的时间横坐标 */
 const TimeAxis: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
-  // TODO CSS MODULE
   const prefixClsTimeAxis = `${prefixCls}-time-axis`
   const { sightConfig, isToday } = store
   const majorList = store.getMajorList()
   const minorList = store.getMinorList()
 
-  const handleResize = useCallback(
+  const onResize = useCallback(
     ({ x }) => {
       store.handlePanMove(-x)
     },
     [store]
   )
 
-  const handleLeftResizeEnd = useCallback(() => {
+  const onResizeEnd = useCallback(() => {
     store.handlePanEnd()
   }, [store])
 
@@ -35,12 +35,14 @@ const TimeAxis: React.FC = () => {
     [sightConfig, isToday]
   )
 
+  console.log('store.translateX', store.translateX)
+
   return (
     <DragResize
-      onResize={handleResize}
-      onResizeEnd={handleLeftResizeEnd}
+      onResize={onResize}
+      onResizeEnd={onResizeEnd}
       defaultSize={{
-        x: -store.translateX,
+        x: -store.translateX, // css translateX 的实际值
         width: 0,
       }}
       type='move'
@@ -55,14 +57,17 @@ const TimeAxis: React.FC = () => {
         <div
           className={`${prefixClsTimeAxis}-render-chunk`}
           style={{
-            transform: `translateX(-${store.translateX}px`,
+            transform: `translateX(-${store.translateX}px`, // -负值向左平移
           }}
         >
+          {/* 大的时间区间 */}
           {majorList.map(item => (
             <div key={item.key} className={`${prefixClsTimeAxis}-major`} style={{ width: item.width, left: item.left }}>
               <div className={`${prefixClsTimeAxis}-major-label`}>{item.label}</div>
             </div>
           ))}
+
+          {/* 小的时间区间 */}
           {minorList.map(item => (
             <div
               key={item.key}

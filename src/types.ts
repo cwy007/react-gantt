@@ -25,6 +25,7 @@ export namespace Gantt {
     width: number
     left: number
     label: string
+    /** 是否是休假日：默认休假日为周六日 */
     isWeek: boolean
     key: string
   }

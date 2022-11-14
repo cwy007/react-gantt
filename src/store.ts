@@ -135,7 +135,7 @@ class GanttStore {
 
   @observable bodyWidth: number
 
-  /** 水平移动的距离, > 0, 向右平移甘特图时translateX变小，向左移动甘特图translateX变大 */
+  /** 水平移动的距离, 始终 >= 0, 向右平移甘特图时translateX变小，向左移动甘特图translateX变大 */
   @observable translateX: number
 
   /** 当前视图配置 */
@@ -236,11 +236,21 @@ class GanttStore {
     this.dependencies = dependencies
   }
 
+  /**
+   * 水平移动时间轴
+   *
+   * PAN是把同一个界面上的所有图像都移动,而图像的坐标都不会改变
+   */
   @action handlePanMove(translateX: number) {
     this.scrolling = true
     this.setTranslateX(translateX)
   }
 
+  /**
+   * 水平移动时间轴 - 停止时调用
+   *
+   * PAN是把同一个界面上的所有图像都移动,而图像的坐标都不会改变
+   */
   @action handlePanEnd() {
     this.scrolling = false
   }
@@ -544,6 +554,7 @@ class GanttStore {
     const endAmp = startAmp + this.getDurationAmp()
     const format = minorFormatMap[this.sightConfig.type] // 计算 label 时会用到
 
+    /** 下一个起点：修改参数的值 */
     // eslint-disable-next-line unicorn/consistent-function-scoping
     const getNextDate = (start: Dayjs) => {
       const map = {
@@ -566,6 +577,8 @@ class GanttStore {
 
       return map[this.sightConfig.type]()
     }
+
+    /** 起点：不修改参数的值 */
     const setStart = (date: Dayjs) => {
       const map = {
         day() {
@@ -589,6 +602,8 @@ class GanttStore {
 
       return map[this.sightConfig.type]()
     }
+
+    /** 终点：不修改参数的值 */
     const setEnd = (start: Dayjs) => {
       const map = {
         day() {
@@ -612,9 +627,11 @@ class GanttStore {
 
       return map[this.sightConfig.type]()
     }
+
     const getMinorKey = (date: Dayjs) => {
-      if (this.sightConfig.type === 'halfYear')
+      if (this.sightConfig.type === 'halfYear') {
         return date.format(format) + (fstHalfYear.has(date.month()) ? '上半年' : '下半年')
+      }
 
       return date.format(format)
     }
@@ -627,7 +644,7 @@ class GanttStore {
       const start = setStart(currentDate)
       const end = setEnd(start)
       dates.push({
-        label: minorKey.split('-').pop() as string,
+        label: minorKey.split('-').pop() as string, // 取最后一个片段
         startDate: start,
         endDate: end,
       })
@@ -686,6 +703,7 @@ class GanttStore {
     return map[this.sightConfig.type]()
   }
 
+  /** minor 时间单位 -> 像素单位 */
   minorAmp2Px(ampList: Gantt.MinorAmp[]): Gantt.Minor[] {
     const { pxUnitAmp } = this
     return ampList.map(item => {
@@ -928,9 +946,11 @@ class GanttStore {
     barInfo.translateX = Math.max(x, 0)
     barInfo.stepGesture = 'moving'
   }
+
   getMovedDay(ms: number): number {
     return Math.round(ms / ONE_DAY_MS)
   }
+
   /** 更新时间 */
   @action async updateTaskDate(
     barInfo: Gantt.Bar,

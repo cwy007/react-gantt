@@ -12,12 +12,12 @@ const TableHeader: React.FC = () => {
   const prefixClsTableHeader = `${prefixCls}-table-header`;
 
   return (
-    <div className={prefixClsTableHeader} style={{ width, height: 56 }}>
+    <div className={prefixClsTableHeader} style={{ width, height: 48 }}>
       <div
         className={`${prefixClsTableHeader}-head`}
-        style={{ width, height: 56 }}
+        style={{ width, height: 48 }}
       >
-        <div className={`${prefixClsTableHeader}-row`} style={{ height: 56 }}>
+        <div className={`${prefixClsTableHeader}-row`} style={{ height: 48 }}>
           {columns.map((column, index) => (
             <div
               key={column.name}

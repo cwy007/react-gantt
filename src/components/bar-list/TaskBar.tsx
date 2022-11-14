@@ -6,9 +6,9 @@ import { usePersistFn } from 'ahooks'
 import Context from '../../context'
 import { Gantt } from '../../types'
 import DragResize from '../drag-resize'
-import './index.less'
 import { TOP_PADDING } from '../../constants'
 import { ONE_DAY_MS } from '../../store'
+import './TaskBar.less'
 
 interface TaskBarProps {
   data: Gantt.Bar

@@ -4,11 +4,13 @@ import classNames from 'classnames';
 import { Gantt } from '../../types';
 import { getMaxRange } from '../../utils';
 import Context from '../../context';
-import './index.less';
+import './GroupBar.less';
+
 interface GroupBarProps {
   data: Gantt.Bar;
 }
 const height = 8;
+
 const GroupBar: React.FC<GroupBarProps> = ({ data }) => {
   const { prefixCls, renderGroupBar } = useContext(Context);
   const { translateY } = data;

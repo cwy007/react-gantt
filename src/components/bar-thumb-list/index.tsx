@@ -2,7 +2,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
 import Context from '../../context'
-import TaskBarThumb from './BarThumbList'
+import TaskBarThumb from './TaskBarThumb'
 
 /** 渲染缩略图列表 */
 const BarThumbList: React.FC = () => {

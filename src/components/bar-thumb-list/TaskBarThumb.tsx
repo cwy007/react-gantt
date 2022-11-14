@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import Context from '../../context'
 import { Gantt } from '../../types'
-import './BarThumbList.less'
+import './TaskBarThumb.less'
 
 interface TaskBarProps {
   data: Gantt.Bar

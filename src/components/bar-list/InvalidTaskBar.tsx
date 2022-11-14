@@ -4,7 +4,7 @@ import { usePersistFn } from 'ahooks'
 import Context from '../../context'
 import { Gantt } from '../../types'
 import DragResize from '../drag-resize'
-import './index.less'
+import './InvalidTaskBar.less'
 
 interface TaskBarProps {
   data: Gantt.Bar

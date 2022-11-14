@@ -148,7 +148,7 @@ const TableRows = () => {
                   </div>
                 )}
                 <span className={`${prefixClsTableBody}-ellipsis`}>
-                  {column.render ? column.render(bar.record) : bar._depth + bar.record[column.name]}
+                  {column.render ? column.render(bar.record) : bar.record[column.name]}
                 </span>
               </div>
             ))}

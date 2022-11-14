@@ -51,7 +51,6 @@
   }
 
   &-row-indentation {
-    height: 100%;
     position: absolute;
     left: 0;
     pointer-events: none;
@@ -59,18 +58,21 @@
     &:before {
       content: '';
       position: absolute;
-      // height: 100%;
+      height: 100%;
       height: inherit;
-      // height: 0;
       left: 0;
       width: 1px;
       bottom: 0;
       background-color: #d9e6f2;
-      background-color: red;
     }
   }
 
   &-row-indentation-both {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    pointer-events: none;
+
     &:after {
       content: '';
       position: absolute;
@@ -79,7 +81,6 @@
       left: 0;
       height: 1px;
       background-color: #d9e6f2;
-      background-color: blue;
     }
   }
 

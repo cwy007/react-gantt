@@ -1,13 +1,10 @@
 import { Gantt } from './types'
 
-/** 获取垂直辅助线的高度 */
-export const getVerticalLineHeight = (target: Gantt.Bar, barList: Gantt.Bar[]) => {
-  // const parent = target._parent;
+/** 获取垂直辅助线的行数 - 目标行与父级行之间的距离 */
+export const getVerticalRowNumber = (target: Gantt.Bar, barList: Gantt.Bar[]) => {
   const targetIndex = barList.indexOf(target)
   const parentIndex = barList.findIndex(bar => bar._parent === target._parent)
-  // const list = barList.slice(parentIndex, targetIndex)
-  // return list.length;
-  return targetIndex - parentIndex
+  return targetIndex - parentIndex + 1
 }
 
 /**

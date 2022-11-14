@@ -5,7 +5,7 @@ import Context from '../../context'
 import { INIT_TABLE_WIDTH, TOP_PADDING } from '../../constants'
 import RowToggler from './RowToggler'
 import './index.less'
-import { getVerticalLineHeight } from '../../utils'
+import { getVerticalRowNumber } from '../../utils'
 
 /** table中的行 */
 const TableRows = () => {
@@ -73,48 +73,42 @@ const TableRows = () => {
                 }}
               >
                 {/* index === 0 首列 */}
-                {/* {index === 0 && (
-                  // eslint-disable-next-line unicorn/no-new-array
-                  new Array(bar._depth).fill(0).map((_, i) => (
-                    <div
-                      // eslint-disable-next-line react/no-array-index-key
-                      key={i}
-                      // className={classNames(`${prefixClsTableBody}-row-indentation`, {
-                      //   // TODO 隐藏掉多余的竖线
-                      //   [`${prefixClsTableBody}-row-indentation-hidden`]: isLastChild && i === bar._depth - 2,
-                      //   // [`${prefixClsTableBody}-row-indentation-hidden`]: isLastChild,
-                      //   [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
-                      // })}
-                      className={`${prefixClsTableBody}-row-indentation`}
-                      style={{
-                        top: -(rowHeight / 2) + 1, // - 向上偏移
-                        left: tableIndent * i + 15, // ++30
-                        width: tableIndent * 1.5 + 5, // 50
-                        height: `${getVerticalLineHeight(bar, barList) * 100}%`
-                      }}
-                    />
-                  ))
-                )} */}
                 {index === 0 && (
                   // eslint-disable-next-line unicorn/no-new-array
                   new Array(bar._depth).fill(0).map((_, i) => (
-                    <div
-                      // eslint-disable-next-line react/no-array-index-key
-                      key={i}
-                      className={classNames(`${prefixClsTableBody}-row-indentation`, {
-                        // TODO 隐藏掉多余的竖线
-                        [`${prefixClsTableBody}-row-indentation-hidden`]: isLastChild && i === bar._depth - 2,
-                        [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
-                      })}
-                      // className={classNames({
-                      //   [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
-                      // })}
-                      style={{
-                        top: -(rowHeight / 2) + 1, // - 向上偏移
-                        left: tableIndent * i + 15, // ++30
-                        width: tableIndent * 1.5 + 5, // 50
-                      }}
-                    />
+                    i === bar._depth -1 ? (
+                      <div
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={i}
+                        className={classNames({
+                          [`${prefixClsTableBody}-row-indentation`]: i === bar._depth -1,
+                        })}
+                        style={{
+                          top: -(rowHeight / 2) + 1 - (getVerticalRowNumber(bar, barList) - 1) * rowHeight, // - 向上偏移
+                          left: tableIndent * i + 15, // ++30
+                          height: getVerticalRowNumber(bar, barList) * rowHeight,
+                        }}
+                      />
+                    ) : null // 竖线
+                  ))
+                )}
+                {index === 0 && (
+                  // eslint-disable-next-line unicorn/no-new-array
+                  new Array(bar._depth).fill(0).map((_, i) => (
+                    i === bar._depth - 1 ? (
+                      <div
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={i}
+                        className={classNames({
+                          [`${prefixClsTableBody}-row-indentation-both`]: i === bar._depth - 1,
+                        })}
+                        style={{
+                          top: -(rowHeight / 2) + 1, // - 向上偏移
+                          left: tableIndent * i + 15, // ++30
+                          width: tableIndent * 1.5 + 5, // 50
+                        }}
+                      />
+                    ) : null // 横线
                   ))
                 )}
                 {index === 0 && bar._childrenCount > 0 && (

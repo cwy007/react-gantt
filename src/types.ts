@@ -3,17 +3,24 @@ import React from 'react'
 
 export type DefaultRecordType = Record<string, any>
 export namespace Gantt {
+
+  /** 时间轴上面大的区间类型 - 像素单位 */
   export interface Major {
-    width: number
-    left: number
+    width: number // px
+    left: number // px
     label: string
     key: string
   }
+
+  // TODO: Amp 是指 timestamp 或者 amplification 吗
+  /** 时间轴上面大的区间类型 - 时间单位 */
   export interface MajorAmp {
     label: string
     startDate: Dayjs
     endDate: Dayjs
   }
+
+  /** 时间轴上面小的区间类型 */
   export interface Minor {
     width: number
     left: number

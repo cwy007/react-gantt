@@ -236,8 +236,7 @@ class GanttStore {
     this.dependencies = dependencies
   }
 
-  @action
-  handlePanMove(translateX: number) {
+  @action handlePanMove(translateX: number) {
     this.scrolling = true
     this.setTranslateX(translateX)
   }
@@ -434,20 +433,23 @@ class GanttStore {
     return this.sightConfig.value * 1000
   }
 
-  /** 当前开始时间毫秒数 */
+  /** 甘特图可见区域左边框对应的毫秒数 */
   @computed get translateAmp() {
     const { translateX } = this
     // console.log('translateX', translateX)
     return this.pxUnitAmp * translateX
   }
 
+  /** 甘特图宽度对应的毫秒数 */
   getDurationAmp() {
     const clientWidth = this.viewWidth
     return this.pxUnitAmp * clientWidth
   }
 
+  /** 组件通过 ref 暴露的方法：计算开始/结束时间区间对应的横坐标宽度 */
   getWidthByDate = (startDate: Dayjs, endDate: Dayjs) => (endDate.valueOf() - startDate.valueOf()) / this.pxUnitAmp
 
+  /** 时间轴上面大的区间对应的数据列表 - 像素单位 */
   getMajorList(): Gantt.Major[] {
     const majorFormatMap: { [key in Gantt.Sight]: string } = {
       day: 'YYYY年MM月',
@@ -456,23 +458,26 @@ class GanttStore {
       quarter: 'YYYY年',
       halfYear: 'YYYY年',
     }
-    const { translateAmp } = this
-    const endAmp = translateAmp + this.getDurationAmp()
+    const { translateAmp } = this // 甘特图可见区域左边框对应的毫秒数
+    const endAmp = translateAmp + this.getDurationAmp() // 甘特图可见区域右边框对应的毫秒数
     const { type } = this.sightConfig
-    const format = majorFormatMap[type]
+    const format = majorFormatMap[type] // 用来计算 label 值
 
+    /** 根据视图类型 type 对 start 进行递增 */
     const getNextDate = (start: Dayjs) => {
       if (type === 'day' || type === 'week') return start.add(1, 'month')
 
       return start.add(1, 'year')
     }
 
+    /** 根据视图类型 type 获取 date 开始的时间 */
     const getStart = (date: Dayjs) => {
       if (type === 'day' || type === 'week') return date.startOf('month')
 
       return date.startOf('year')
     }
 
+    /** 根据视图类型 type 获取 date 结束的时间 */
     const getEnd = (date: Dayjs) => {
       if (type === 'day' || type === 'week') return date.endOf('month')
 
@@ -487,9 +492,9 @@ class GanttStore {
     while (currentDate.isBetween(translateAmp - 1, endAmp + 1)) {
       const majorKey = currentDate.format(format)
 
-      let start = currentDate
+      let start = currentDate // 第一条的开始，取左侧的坐标
       const end = getEnd(start)
-      if (dates.length > 0) start = getStart(currentDate)
+      if (dates.length > 0) start = getStart(currentDate) // 非首条的开始
 
       dates.push({
         label: majorKey,
@@ -499,13 +504,14 @@ class GanttStore {
 
       // 获取下次迭代的时间
       start = getStart(currentDate)
-      currentDate = getNextDate(start)
+      currentDate = getNextDate(start) // 下一段的开始时间，按规则递增
     }
 
     return this.majorAmp2Px(dates)
   }
 
-  majorAmp2Px(ampList: Gantt.MajorAmp[]) {
+  /** 时间单位 -> 像素单位 */
+  majorAmp2Px(ampList: Gantt.MajorAmp[]): Gantt.Major[] {
     const { pxUnitAmp } = this
     return ampList.map(item => {
       const { startDate } = item
@@ -523,6 +529,7 @@ class GanttStore {
     })
   }
 
+  /** 时间轴上下的单坐标对应的数据列表 - 像素单位 */
   getMinorList(): Gantt.Minor[] {
     const minorFormatMap = {
       day: 'YYYY-MM-D',
@@ -535,7 +542,7 @@ class GanttStore {
 
     const startAmp = this.translateAmp
     const endAmp = startAmp + this.getDurationAmp()
-    const format = minorFormatMap[this.sightConfig.type]
+    const format = minorFormatMap[this.sightConfig.type] // 计算 label 时会用到
 
     // eslint-disable-next-line unicorn/consistent-function-scoping
     const getNextDate = (start: Dayjs) => {

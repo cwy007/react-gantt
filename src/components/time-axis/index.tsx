@@ -14,12 +14,14 @@ const TimeAxis: React.FC = () => {
   const { sightConfig, isToday } = store
   const majorList = store.getMajorList()
   const minorList = store.getMinorList()
+
   const handleResize = useCallback(
     ({ x }) => {
       store.handlePanMove(-x)
     },
     [store]
   )
+
   const handleLeftResizeEnd = useCallback(() => {
     store.handlePanEnd()
   }, [store])
@@ -81,8 +83,5 @@ const TimeAxis: React.FC = () => {
     </DragResize>
   )
 }
-export default observer(TimeAxis)
 
-// TODO
-// 文件夹命名方式 - 烤肉串
-// antd 中也是烤肉串形式名称的 dir
+export default observer(TimeAxis)

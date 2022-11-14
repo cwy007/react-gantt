@@ -1,16 +1,19 @@
 import { observer } from 'mobx-react-lite'
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Context from '../../context'
 import BarList from '../bar-list'
 import BarThumbList from '../bar-thumb-list'
 import Dependencies from '../dependencies'
-import DragPresent from '../drag-present'
+import DragPresent from './DragPresent'
 import Today from '../today'
 import './index.less'
 
+/** 甘特图-图标 */
 const Chart: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
-  const { tableWidth, viewWidth, bodyScrollHeight, translateX, chartElementRef } = store
+  const {
+    tableWidth, viewWidth, bodyScrollHeight, translateX, chartElementRef,
+  } = store
   const minorList = store.getMinorList()
 
   useEffect(() => {
@@ -51,6 +54,8 @@ const Chart: React.FC = () => {
             <line stroke='#c6c6c6' strokeWidth='1px' y2='10' />
           </pattern>
         </defs>
+
+        {/* 画x轴对应的竖线 */}
         {minorList.map(item =>
           item.isWeek ? (
             <g key={item.key} stroke='#f0f0f0'>
@@ -71,9 +76,13 @@ const Chart: React.FC = () => {
             </g>
           )
         )}
+
+        {/* 拖动时的提示条 */}
         <DragPresent />
+
         <Dependencies />
       </svg>
+
       <div
         className={`${prefixCls}-render-chunk`}
         style={{

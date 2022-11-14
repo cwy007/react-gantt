@@ -35,8 +35,6 @@ const TimeAxis: React.FC = () => {
     [sightConfig, isToday]
   )
 
-  console.log('store.translateX', store.translateX)
-
   return (
     <DragResize
       onResize={onResize}

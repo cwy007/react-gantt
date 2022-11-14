@@ -10,10 +10,12 @@ const spaceY = 10
 interface DependenceProps {
   data: Gantt.Dependence
 }
+
 interface Point {
   x: number
   y: number
 }
+
 /**
  * 获取关键点
  *
@@ -90,9 +92,9 @@ const Dependence: React.FC<DependenceProps> = ({ data }) => {
         strokeWidth='1'
         fill='#f87872'
         d={`
-        M${end.x},${end.y} 
-        L${end.x - 4 * endPosition},${end.y - 3 * endPosition} 
-        L${end.x - 4 * endPosition},${end.y + 3 * endPosition} 
+        M${end.x},${end.y}
+        L${end.x - 4 * endPosition},${end.y - 3 * endPosition}
+        L${end.x - 4 * endPosition},${end.y + 3 * endPosition}
         Z`}
       />
     </g>

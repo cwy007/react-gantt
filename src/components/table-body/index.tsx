@@ -32,9 +32,6 @@ const TableRows = () => {
     )
   }
 
-  console.log('barList', barList)
-  console.log('count, start', count, start)
-
   return (
     <>
       {barList.slice(start, start + count).map((bar, rowIndex) => {

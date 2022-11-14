@@ -147,8 +147,10 @@ class GanttStore {
   /** 鼠标hover效果模拟 div 元素 top 属性 */
   @observable selectionIndicatorTop = 0
 
+  /** 拖拽 */
   @observable dragging: Gantt.Bar | null = null
 
+  /** // TODO: ?? */
   @observable draggingType: Gantt.MoveType | null = null
 
   /** 是否禁用图表 */
@@ -232,6 +234,7 @@ class GanttStore {
     this.columns = columns
   }
 
+  /** 修改dependencies */
   @action  setDependencies(dependencies: Gantt.Dependence[]) {
     this.dependencies = dependencies
   }

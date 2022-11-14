@@ -6,6 +6,7 @@ import Dependence from './Dependence';
 const Dependencies: React.FC = () => {
   const { store } = useContext(Context);
   const { dependencies } = store;
+
   return (
     <>
       {dependencies.map((dependence) => (
@@ -14,4 +15,5 @@ const Dependencies: React.FC = () => {
     </>
   );
 };
+
 export default observer(Dependencies);

@@ -22,7 +22,6 @@ const ScrollBar: React.FC = () => {
   //
   const handleMouseMove = usePersistFn((event: MouseEvent) => {
     const distance = event.clientX - positionRef.current.left // 鼠标移动的距离
-    console.log('distance->', distance)
     // TODO 调整倍率
     // 甘特图下方滚动条拖拽按钮的宽度越小，滚动越快
     store.setTranslateX(distance * (store.viewWidth / store.scrollBarWidth) + positionRef.current.translateX)
@@ -45,8 +44,6 @@ const ScrollBar: React.FC = () => {
     },
     [handleMouseMove, handleMouseUp, store.translateX]
   )
-
-  console.log('resizing-->', resizing)
 
   return (
     <div

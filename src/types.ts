@@ -171,6 +171,7 @@ export namespace Gantt {
     align?: ColumnAlign
   }
 
+  /** */
   export type DependenceType =
    'start_finish' // TODO
    | 'finish_start'

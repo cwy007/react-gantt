@@ -76,7 +76,7 @@ export function transverseData(data: Gantt.Record[] = [], startDateKey: string, 
     const item: Gantt.Item = {
       key: genKey(), // TODO
       record,
-      content: '',
+      content: '', // TODO
       group: record.group, //
       startDate: record[startDateKey] || '',
       endDate: record[endDateKey] || '',

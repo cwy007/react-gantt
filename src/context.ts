@@ -22,7 +22,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   showBackToday: boolean
   /** 展示视图切换 */
   showUnitSwitch: boolean
-  /** 行事件 */
+  /** table 行事件 */
   onRow?: {
     onClick: (record: Gantt.Record<RecordType>) => void
   }
@@ -57,11 +57,11 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   tableCollapseAble: boolean
   /** 返回顶部按钮，默认值为true，可以通过这个参数设置返回按钮的样式 */
   scrollTop: boolean | React.CSSProperties
-  /** 是否展示左右侧内容 */
+  /** 是否展示左右侧文本内容 */
   alwaysShowTaskBar?: boolean
-  /** 自定义渲染左侧内容区 */
+  /** 自定义渲染左侧文本内容区 */
   renderLeftText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
-  /** 自定义渲染右侧内容区 */
+  /** 自定义渲染右侧文本内容区 */
   renderRightText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   /** 点击展开图标时触发 */
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void

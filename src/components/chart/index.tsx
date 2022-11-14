@@ -8,7 +8,7 @@ import DragPresent from './DragPresent'
 import Today from '../today'
 import './index.less'
 
-/** 甘特图-图标 */
+/** 甘特图-图表 */
 const Chart: React.FC = () => {
   const { store, prefixCls } = useContext(Context)
   const {
@@ -91,6 +91,7 @@ const Chart: React.FC = () => {
           transform: `translateX(-${translateX}px`,
         }}
       >
+        {/* 渲染缩略图列表 */}
         <BarThumbList />
 
         <BarList />

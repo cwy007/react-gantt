@@ -117,7 +117,7 @@ export namespace Gantt {
     startDate: string | null
     /** 结束时间 */
     endDate: string | null
-    /** // TODO: ？？ */
+    /** 排期条不在甘特图可见区域内时，显示的内容 */
     content: string
     /** 是否是折叠状态 */
     collapsed: boolean

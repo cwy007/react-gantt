@@ -730,11 +730,13 @@ class GanttStore {
     })
   }
 
+  /** 缩略图是否可见：当 bar 位于甘特图可见区域外时，返回true */
   getTaskBarThumbVisible(barInfo: Gantt.Bar) {
     const { width, translateX: barTranslateX, invalidDateRange } = barInfo
     if (invalidDateRange) return false
 
     const rightSide = this.translateX + this.viewWidth
+    console.log('this.translateX->', this.translateX)
     return barTranslateX + width < this.translateX || barTranslateX - rightSide > 0
   }
 

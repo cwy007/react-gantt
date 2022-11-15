@@ -100,7 +100,7 @@ class GanttStore {
 
   _wheelTimer: number | undefined
 
-  scrollTimer: number | undefined
+  // scrollTimer: number | undefined
 
   /** 转换过的数据源 */
   @observable data: Gantt.Item[] = []
@@ -120,7 +120,7 @@ class GanttStore {
   /** tableBody 和 gantt 的父元素 main 元素的滚动高度 */
   @observable scrollTop = 0
 
-  @observable collapse = false
+  // @observable collapse = false
 
   /** table 的宽度 */
   @observable tableWidth: number
@@ -134,6 +134,7 @@ class GanttStore {
   /** gantt-body 元素的高度 */
   @observable height: number
 
+  /** gantt-body 容器的宽度 */
   @observable bodyWidth: number
 
   /** 水平移动的距离, 始终 >= 0, 向右平移甘特图时translateX变小，向左移动甘特图translateX变大 */
@@ -148,10 +149,10 @@ class GanttStore {
   /** 鼠标hover效果模拟 div 元素 top 属性 */
   @observable selectionIndicatorTop = 0
 
-  /** 拖拽 */
+  /** 拖拽数据 bar */
   @observable dragging: Gantt.Bar | null = null
 
-  /** // TODO: ?? */
+  /** 拖拽类型 */
   @observable draggingType: Gantt.MoveType | null = null
 
   /** 是否禁用图表 */
@@ -160,7 +161,7 @@ class GanttStore {
   /** 视图类型：日视图、周视图、月视图、季视图、年视图 */
   viewTypeList = viewTypeList
 
-  gestureKeyPress = false
+  // gestureKeyPress = false
 
   /** tableBody 和 gantt 的父元素 main */
   mainElementRef = createRef<HTMLDivElement>()
@@ -181,10 +182,11 @@ class GanttStore {
   /** 接受时间的字段名称 */
   endDateKey = 'endDate'
 
-  autoScrollPos = 0
+  // autoScrollPos = 0
 
-  clientX = 0
+  // clientX = 0
 
+  /** 行高 */
   rowHeight: number
 
   /** 修改回调 */
@@ -203,6 +205,7 @@ class GanttStore {
     this.isRestDay = function_ || isRestDay
   }
 
+  /** 格式化和保存数据源 */
   @action setData(data: Gantt.Record[], startDateKey: string, endDateKey: string) {
     this.startDateKey = startDateKey // 字段名称
     this.endDateKey = endDateKey // endDate 对应的字段名称
@@ -232,6 +235,7 @@ class GanttStore {
     // this.barList = this.getBarList();
   }
 
+  /** 保存回调函数（回调函数在拖拽排期区间的时候会触发） */
   @action setOnUpdate(onUpdate: GanttProperties['onUpdate']) {
     this.onUpdate = onUpdate
   }
@@ -915,11 +919,13 @@ class GanttStore {
     }
   }
 
+  /** top 为 bar.translateY，判断 bar 是否位于鼠标所在的行 */
   getHovered = (top: number) => {
     const baseTop = top - (top % this.rowHeight)
     return this.selectionIndicatorTop >= baseTop && this.selectionIndicatorTop <= baseTop + this.rowHeight
   }
 
+  /** 拖拽开始 - mouseup */
   @action handleDragStart(barInfo: Gantt.Bar, type: Gantt.MoveType) {
     this.dragging = barInfo
     this.draggingType = type
@@ -1008,6 +1014,7 @@ class GanttStore {
     runInAction(() => {
       barInfo.loading = true
     })
+    // TODO
     const success = await this.onUpdate(toJS(record), startDate, endDate)
     if (success) {
       runInAction(() => {

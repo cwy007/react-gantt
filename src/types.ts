@@ -37,6 +37,7 @@ export namespace Gantt {
 
   /** x轴单位 */
   export type Sight = 'day' | 'week' | 'month' | 'quarter' | 'halfYear'
+  /** 移动类型 */
   export type MoveType = 'left' | 'right' | 'move' | 'create'
 
   /**
@@ -148,7 +149,7 @@ export namespace Gantt {
     collapsed?: boolean
     /** 子项 */
     children?: Record<RecordType>[]
-    /** // TODO: ？？ */
+    /** 是否禁用拖拽改变时间区间的宽度 */
     disabled?: boolean
     /** id 依赖结构中会使用到 */
     id?: string | number

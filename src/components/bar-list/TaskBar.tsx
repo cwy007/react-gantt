@@ -44,12 +44,17 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
 
   const { selectionIndicatorTop, showSelectionIndicator, rowHeight } = store
 
+  /** 通过鼠标 hover 效果位置和 bar.translateY 判断是否显示左右拖拽元素 */
   const showDragBar = useMemo(() => {
     if (!showSelectionIndicator) return false
     // 差值
     const baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2
     return selectionIndicatorTop === translateY - baseTop
   }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight])
+
+  console.log('showDragBar-->', showDragBar)
+  console.log('showDragBar--> loading', loading)
+
 
   // const themeColor = useMemo(() => {
   //   // 未预期
@@ -118,14 +123,15 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     [data.record, onBarClick]
   )
 
+  /** 是否到最左边了 */
   const reachEdge = usePersistFn((position: 'left' | 'right') => position === 'left' && store.translateX <= 0)
   // TODO:
   // 根据不同的视图确定拖动时的单位，在任何视图下都以小时为单位
   const grid = useMemo(() => ONE_HOUR_MS / store.pxUnitAmp, [store.pxUnitAmp])
 
+  // TODO ??
+  // -0.00007291666666666667
   const moveCalc = -(width / store.pxUnitAmp)
-
-  console.log('translateY', translateY)
 
   return (
     // TODO Popover 鼠标 hover 提示
@@ -154,7 +160,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
                 width,
               }}
               // minWidth={24}
-              // grid={grid}
+              grid={grid}
               type='left'
               scroller={store.chartElementRef.current || undefined}
               onAutoScroll={handleAutoScroll}
@@ -175,7 +181,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
                 width,
               }}
               // minWidth={24}
-              // grid={grid}
+              grid={grid}
               type='right'
               scroller={store.chartElementRef.current || undefined}
               onAutoScroll={handleAutoScroll}

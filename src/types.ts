@@ -75,7 +75,7 @@ export namespace Gantt {
     key: React.Key
     /** 格式化数据时设置的 content 字段 */
     label: string
-    /** 排期条宽度 */
+    /** 排期条宽度, 单位像素 */
     width: number
     /** 排期条水平方向偏移量 */
     translateX: number
@@ -95,7 +95,7 @@ export namespace Gantt {
     record: Record<RecordType>
     /** 默认值 false */
     loading: boolean
-    /** // TODO ?? */
+    /** 为true 时，会渲染 GroupBar */
     _group?: boolean
     /** 是否折叠 */
     _collapsed: boolean

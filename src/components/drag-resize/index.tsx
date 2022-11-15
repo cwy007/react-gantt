@@ -29,7 +29,7 @@ interface DragResizeProps extends React.HTMLProps<HTMLDivElement> {
   /** 默认值 true */
   autoScroll?: boolean;
   onAutoScroll?: (delta: number) => void;
-  /** 默认值 () => false */
+  /** 是否到最左边了，默认值 () => false */
   reachEdge?: (position: 'left' | 'right') => boolean;
   /** 点击就算开始，默认值为 false */
   clickStart?: boolean;

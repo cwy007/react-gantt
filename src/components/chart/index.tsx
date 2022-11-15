@@ -30,7 +30,6 @@ const Chart: React.FC = () => {
       ref={chartElementRef}
       className={`${prefixCls}-chart`}
       style={{
-        left: tableWidth,
         width: viewWidth,
         height: bodyScrollHeight,
       }}

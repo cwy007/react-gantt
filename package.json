@@ -49,8 +49,9 @@
     "dayjs": "^1.9.7",
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.21",
-    "mobx": "4.7.0",
-    "mobx-react-lite": "1.5.2",
+    "mobx": "^6.5.0",
+    "mobx-react-lite": "^3.3.0",
+    "mockjs": "^1.1.0",
     "newcore-table-scene": "^1.4.9"
   },
   "devDependencies": {

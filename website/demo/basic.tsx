@@ -24,6 +24,26 @@ const App = () => (
           label: '名称',
           width: 100,
         },
+        {
+          name: 'startDate',
+          label: '开始时间',
+          width: 100,
+        },
+        {
+          name: 'endDate',
+          label: '结束时间',
+          width: 100,
+        },
+        {
+          name: 'startDate',
+          label: '开始时间2',
+          // width: 100,
+        },
+        {
+          name: 'endDate',
+          label: '结束时间2',
+          // width: 100,
+        },
       ]}
       onUpdate={async (row, startDate, endDate) => {
         console.log('update', row, startDate, endDate)

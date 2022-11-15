@@ -2,6 +2,7 @@ import { useSize } from 'ahooks'
 import { Dayjs } from 'dayjs'
 import { toJS } from 'mobx'
 import { Observer } from 'mobx-react-lite'
+import { TableScene } from 'newcore-table-scene'
 import React, {
   useContext, useEffect, useImperativeHandle, useMemo, useRef, useCallback,
 } from 'react'
@@ -257,6 +258,41 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
                 height: '100%',
               }}
             >
+              <TableScene
+                namespace="newcoreTableSceneTree"
+                simple
+                exportConfig
+                columns={columns as any}
+                type="normal"
+                tree
+                treeCheckbox
+                dataSource={data}
+                // serverSideDataSource={(_f, _s, pagination) =>
+                //   getDataSource(pagination).then((res: any) => ({
+                //     dataSource: res.dataSource || [],
+                //     total: res.total || 0,
+                //     childTotal: res.childTotal,
+                //   }))
+                // }
+                rowKey={(record: any) => `${record.key}-${record.level}`}
+                scroll={{
+                  y: '50vh',
+                }}
+                expandable={{
+                  defaultExpandAllRows: true,
+                }}
+                treeExpandable={{
+                  defaultExpandAllRows: false,
+                }}
+                virtual
+                resizable
+                rowSelection={{
+                  type: 'multiple',
+                  onChange(rows) {
+                    console.log(rows);
+                  },
+                }}
+              />
 
             </div>
 

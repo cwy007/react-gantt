@@ -13,7 +13,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import debounce from 'lodash/debounce'
 import find from 'lodash/find'
 import throttle from 'lodash/throttle'
-import { action, computed, observable, runInAction, toJS } from 'mobx'
+import { makeAutoObservable, observable, runInAction, toJS } from 'mobx'
 import React, { createRef } from 'react'
 import { HEADER_HEIGHT, INIT_TABLE_WIDTH, INIT_VIEW_WIDTH, MIN_TABLE_WIDTH, MIN_VIEW_WIDTH, TOP_PADDING } from './constants'
 import { GanttProps as GanttProperties } from './Gantt'
@@ -96,6 +96,8 @@ class GanttStore {
     this.bodyWidth = bodyWidth
     this.rowHeight = rowHeight
     this.disabled = disabled
+
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   _wheelTimer: number | undefined
@@ -103,60 +105,60 @@ class GanttStore {
   // scrollTimer: number | undefined
 
   /** 转换过的数据源 */
-  @observable data: Gantt.Item[] = []
+  data: Gantt.Item[] = []
 
   /** 原有的数据源 */
-  @observable originData: Gantt.Record[] = []
+  originData: Gantt.Record[] = []
 
   /** 数据列 */
-  @observable columns: Gantt.Column[] = []
+  columns: Gantt.Column[] = []
 
   /** 依赖 */
-  @observable dependencies: Gantt.Dependence[] = []
+  dependencies: Gantt.Dependence[] = []
 
   /** 甘特图是否在水平移动 */
-  @observable scrolling = false
+  scrolling = false
 
   /** tableBody 和 gantt 的父元素 main 元素的滚动高度 */
-  @observable scrollTop = 0
+  scrollTop = 0
 
-  // @observable collapse = false
+  // collapse = false
 
   /** table 的宽度 */
-  @observable tableWidth: number
+  tableWidth: number
 
   /** gantt 的宽度 */
-  @observable viewWidth: number
+  viewWidth: number
 
   /** table 和 gantt 容器的宽度 */
-  @observable width: number
+  width: number
 
   /** gantt-body 元素的高度 */
-  @observable height: number
+  height: number
 
   /** gantt-body 容器的宽度 */
-  @observable bodyWidth: number
+  bodyWidth: number
 
   /** 水平移动的距离, 始终 >= 0, 向右平移甘特图时translateX变小，向左移动甘特图translateX变大 */
-  @observable translateX: number
+  translateX: number
 
   /** 当前视图配置 */
-  @observable sightConfig: Gantt.SightConfig
+  sightConfig: Gantt.SightConfig
 
   /** 是否显示鼠标hover效果 */
-  @observable showSelectionIndicator = false
+  showSelectionIndicator = false
 
   /** 鼠标hover效果模拟 div 元素 top 属性 */
-  @observable selectionIndicatorTop = 0
+  selectionIndicatorTop = 0
 
   /** 拖拽数据 bar */
-  @observable dragging: Gantt.Bar | null = null
+  dragging: Gantt.Bar | null = null
 
   /** 拖拽类型 */
-  @observable draggingType: Gantt.MoveType | null = null
+  draggingType: Gantt.MoveType | null = null
 
   /** 是否禁用图表 */
-  @observable disabled = false
+  disabled = false
 
   /** 视图类型：日视图、周视图、月视图、季视图、年视图 */
   viewTypeList = viewTypeList
@@ -206,7 +208,7 @@ class GanttStore {
   }
 
   /** 格式化和保存数据源 */
-  @action setData(data: Gantt.Record[], startDateKey: string, endDateKey: string) {
+  setData(data: Gantt.Record[], startDateKey: string, endDateKey: string) {
     this.startDateKey = startDateKey // 字段名称
     this.endDateKey = endDateKey // endDate 对应的字段名称
     this.originData = data // 数据源
@@ -218,7 +220,7 @@ class GanttStore {
    *
    * 2.
    */
-  @action toggleCollapse() {
+  toggleCollapse() {
     if (this.tableWidth > 0) {
       this.tableWidth = 0
       this.viewWidth = this.width - this.tableWidth
@@ -228,7 +230,7 @@ class GanttStore {
   }
 
   /** 修改 data 中的数据 item 的 collapsed 属性 */
-  @action setRowCollapse(item: Gantt.Item, collapsed: boolean) {
+  setRowCollapse(item: Gantt.Item, collapsed: boolean) {
     // getBarList 中用到 flattenDeep
     // flattenDeep 中用到 collapsed 判断是否展开 children
     item.collapsed = collapsed
@@ -236,16 +238,16 @@ class GanttStore {
   }
 
   /** 保存回调函数（回调函数在拖拽排期区间的时候会触发） */
-  @action setOnUpdate(onUpdate: GanttProperties['onUpdate']) {
+  setOnUpdate(onUpdate: GanttProperties['onUpdate']) {
     this.onUpdate = onUpdate
   }
 
-  @action setColumns(columns: Gantt.Column[]) {
+  setColumns(columns: Gantt.Column[]) {
     this.columns = columns
   }
 
   /** 修改dependencies */
-  @action  setDependencies(dependencies: Gantt.Dependence[]) {
+   setDependencies(dependencies: Gantt.Dependence[]) {
     this.dependencies = dependencies
   }
 
@@ -254,7 +256,7 @@ class GanttStore {
    *
    * PAN是把同一个界面上的所有图像都移动,而图像的坐标都不会改变
    */
-  @action handlePanMove(translateX: number) {
+  handlePanMove(translateX: number) {
     this.scrolling = true
     this.setTranslateX(translateX)
   }
@@ -264,14 +266,14 @@ class GanttStore {
    *
    * PAN是把同一个界面上的所有图像都移动,而图像的坐标都不会改变
    */
-  @action handlePanEnd() {
+  handlePanEnd() {
     this.scrolling = false
   }
 
   /**
    * size 是元素 gantt-body 的尺寸（容器的尺寸）
    */
-  @action syncSize(size: { width?: number; height?: number }) {
+  syncSize(size: { width?: number; height?: number }) {
     console.log('syncSize-->', size)
     if (!size.height || !size.width) return
 
@@ -289,7 +291,7 @@ class GanttStore {
    *
    * 1.每一列都设置了 width 属性时，不改变 table 的总宽度
    */
-  @action handleResizeTableWidth(width: number) {
+  handleResizeTableWidth(width: number) {
     const columnsWidthArr = this.columns.filter(column => column.width > 0)
     if (this.columns.length === columnsWidthArr.length) return
     this.tableWidth = width
@@ -316,7 +318,7 @@ class GanttStore {
   /**
    * 图表宽度不能小于 MIN_VIEW_WIDTH
    */
-  @action initWidth() {
+  initWidth() {
     this.tableWidth = Math.max(this.totalColumnWidth, INIT_TABLE_WIDTH)
     // 如果屏幕宽度被拉大，table宽度不变，甘特图宽度变大
     this.viewWidth = this.width - this.tableWidth // gantt图宽度
@@ -330,12 +332,12 @@ class GanttStore {
   }
 
   /** 水平移动的距离 */
-  @action setTranslateX(translateX: number) {
+  setTranslateX(translateX: number) {
     this.translateX = Math.max(translateX, 0)
   }
 
   /** 切换视图 */
-  @action switchSight(type: Gantt.Sight) {
+  switchSight(type: Gantt.Sight) {
     const target = find(this.viewTypeList, { type })
     if (target) {
       this.sightConfig = target
@@ -344,7 +346,7 @@ class GanttStore {
   }
 
   /** 返回今日 今日的坐标位于甘特图中间 */
-  @action scrollToToday() {
+  scrollToToday() {
     const translateX = this.todayTranslateX - this.viewWidth / 2
     this.setTranslateX(translateX)
   }
@@ -355,18 +357,18 @@ class GanttStore {
   }
 
   /** 今日对应的横坐标 px */
-  @computed get todayTranslateX() {
+  get todayTranslateX() {
     return dayjs().startOf('day').valueOf() / this.pxUnitAmp
   }
 
   /** 甘特图下方滚动条拖拽按钮的宽度 30..160 */
-  @computed get scrollBarWidth() {
+  get scrollBarWidth() {
     const MIN_WIDTH = 30
     return Math.max((this.viewWidth / this.scrollWidth) * 160, MIN_WIDTH)
   }
 
   /** 甘特图下方滚动条拖拽按钮样式 left 属性 */
-  @computed get scrollLeft() {
+  get scrollLeft() {
     const rate = this.viewWidth / this.scrollWidth
     const currentDate = dayjs(this.translateAmp).toString()
     // console.log('currentDate', currentDate)
@@ -378,7 +380,7 @@ class GanttStore {
   }
 
   /** 相对应甘特图初始位置 this.getStartDate 的偏移量 */
-  @computed get scrollWidth() {
+  get scrollWidth() {
     // TODO 待研究
     // 最小宽度
     const init = this.viewWidth + 200 // 甘特图最小宽度200
@@ -387,7 +389,7 @@ class GanttStore {
   }
 
   /** 内容区滚动高度 */
-  @computed get bodyClientHeight() {
+  get bodyClientHeight() {
     // 1是边框 - gantt-body下边框
     return this.height - HEADER_HEIGHT - 1
   }
@@ -397,7 +399,7 @@ class GanttStore {
    *
    * 在 table-header 中使用
    */
-  @computed get getColumnsWidth(): number[] {
+  get getColumnsWidth(): number[] {
     // 为1列时最小宽度为200
     // FIXME TODO: 原来组件这里是有bug的
     if (this.columns.length === 1 && (this.columns[0]?.width || 0) <= MIN_TABLE_WIDTH) {
@@ -433,12 +435,12 @@ class GanttStore {
   }
 
   /** table 总的宽度 */
-  @computed get totalColumnWidth(): number {
+  get totalColumnWidth(): number {
     return this.getColumnsWidth.reduce((width, item) => width + (item || 0), 0)
   }
 
   /** 内容区滚动区域高度 */
-  @computed get bodyScrollHeight() {
+  get bodyScrollHeight() {
     // 数据行的高度
     let height = this.getBarList.length * this.rowHeight + TOP_PADDING
 
@@ -453,12 +455,12 @@ class GanttStore {
    *
    * amp -> amplification 放大
    * */
-  @computed get pxUnitAmp() {
+  get pxUnitAmp() {
     return this.sightConfig.value * 1000
   }
 
   /** 甘特图可见区域左边框对应的毫秒数 */
-  @computed get translateAmp() {
+  get translateAmp() {
     const { translateX } = this
     // console.log('translateX', translateX)
     return this.pxUnitAmp * translateX
@@ -767,7 +769,7 @@ class GanttStore {
   /**
    * Item -> Bar
    */
-  @computed get getBarList(): Gantt.Bar[] {
+  get getBarList(): Gantt.Bar[] {
     const { pxUnitAmp, data } = this
     // 最小宽度
     // const minStamp = 11 * pxUnitAmp
@@ -841,7 +843,7 @@ class GanttStore {
     return observable(barList)
   }
 
-  @action handleWheel = (event: WheelEvent) => {
+  handleWheel = (event: WheelEvent) => {
     if (event.deltaX !== 0) {
       event.preventDefault()
       event.stopPropagation()
@@ -869,7 +871,7 @@ class GanttStore {
   }, 100)
 
   /** 虚拟滚动：可见行数 + 10 */
-  @computed get getVisibleRows() {
+  get getVisibleRows() {
     const visibleHeight = this.bodyClientHeight // 页面可见的甘特图高度（不包含时间轴）
     // 多渲染10个，减少空白
     const visibleRowCount = Math.ceil(visibleHeight / this.rowHeight) + 10
@@ -900,7 +902,7 @@ class GanttStore {
   }, 5)
 
   /** 显示：模拟鼠标hover效果 */
-  @action showSelectionBar(event: MouseEvent) {
+  showSelectionBar(event: MouseEvent) {
     const scrollTop = this.mainElementRef.current?.scrollTop || 0
     // top 元素上边距离浏览器窗口上边的距离
     const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
@@ -927,7 +929,7 @@ class GanttStore {
   }
 
   /** 拖拽开始 - mouseup */
-  @action handleDragStart(barInfo: Gantt.Bar, type: Gantt.MoveType) {
+  handleDragStart(barInfo: Gantt.Bar, type: Gantt.MoveType) {
     this.dragging = barInfo
     this.draggingType = type
     barInfo.stepGesture = 'start'
@@ -935,7 +937,7 @@ class GanttStore {
   }
 
   /** 拖拽结束 - mouseup */
-  @action handleDragEnd() {
+  handleDragEnd() {
     if (this.dragging) {
       this.dragging.stepGesture = 'end'
       this.dragging = null
@@ -945,21 +947,21 @@ class GanttStore {
   }
 
   /** =============== // TODO invalid bar END =============== */
-  @action handleInvalidBarLeave() {
+  handleInvalidBarLeave() {
     this.handleDragEnd()
   }
 
-  @action handleInvalidBarHover(barInfo: Gantt.Bar, left: number, width: number) {
+  handleInvalidBarHover(barInfo: Gantt.Bar, left: number, width: number) {
     barInfo.translateX = left
     barInfo.width = width
     this.handleDragStart(barInfo, 'create')
   }
 
-  @action handleInvalidBarDragStart(barInfo: Gantt.Bar) {
+  handleInvalidBarDragStart(barInfo: Gantt.Bar) {
     barInfo.stepGesture = 'moving'
   }
 
-  @action handleInvalidBarDragEnd(barInfo: Gantt.Bar, oldSize: { width: number; x: number }) {
+  handleInvalidBarDragEnd(barInfo: Gantt.Bar, oldSize: { width: number; x: number }) {
     barInfo.invalidDateRange = false
     this.handleDragEnd()
     this.updateTaskDate(barInfo, oldSize, 'create')
@@ -967,7 +969,7 @@ class GanttStore {
   /** =============== // TODO invalid bar END =============== */
 
   /** 更新时间区间的宽度和偏移量x */
-  @action updateBarSize(barInfo: Gantt.Bar, { width, x }: { width: number; x: number }) {
+  updateBarSize(barInfo: Gantt.Bar, { width, x }: { width: number; x: number }) {
     barInfo.width = width
     barInfo.translateX = Math.max(x, 0)
     barInfo.stepGesture = 'moving'
@@ -978,7 +980,7 @@ class GanttStore {
   }
 
   /** 更新时间 */
-  @action async updateTaskDate(
+  async updateTaskDate(
     barInfo: Gantt.Bar,
     oldSize: { width: number; x: number },
     type: 'move' | 'left' | 'right' | 'create'

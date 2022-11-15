@@ -57,20 +57,20 @@ const App = () => (
       columns={[
         {
           name: 'name',
-          label: '名称',
+          title: '名称',
         },
         {
           name: 'startDate',
-          label: '开始时间',
+          title: '开始时间',
           width: 100,
         },
         {
           name: 'endDate',
-          label: '结束时间',
+          title: '结束时间',
           // width: 100, // 如果table的colums中每一个都设置了宽度 width，无法
           render: record => <span>{record.endDate}</span>,
         },
-      ]}
+      ] as any}
       onUpdate={async () => true}
     />
   </div>

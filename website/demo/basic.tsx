@@ -21,30 +21,30 @@ const App = () => (
       columns={[
         {
           name: 'name',
-          label: '名称',
+          title: '名称',
           width: 100,
         },
         {
           name: 'startDate',
-          label: '开始时间',
+          title: '开始时间',
           width: 100,
         },
         {
           name: 'endDate',
-          label: '结束时间',
+          title: '结束时间',
           width: 100,
         },
         {
           name: 'startDate',
-          label: '开始时间2',
+          title: '开始时间2',
           // width: 100,
         },
         {
           name: 'endDate',
-          label: '结束时间2',
+          title: '结束时间2',
           // width: 100,
         },
-      ]}
+      ] as any}
       onUpdate={async (row, startDate, endDate) => {
         console.log('update', row, startDate, endDate)
         return true

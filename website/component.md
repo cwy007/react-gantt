@@ -34,7 +34,7 @@ nav:
 
 可以通过 `onExpand` 获取当前展开的状态
 
-<!-- <code src="./demo/child.tsx"></code> -->
+<code src="./demo/child.tsx"></code>
 
 ### 自定义表格列
 

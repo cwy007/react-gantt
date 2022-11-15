@@ -275,9 +275,9 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
                 //   }))
                 // }
                 rowKey={(record: any) => `${record.key}-${record.level}`}
-                scroll={{
-                  y: '50vh',
-                }}
+                // scroll={{
+                //   y: '50vh',
+                // }}
                 expandable={{
                   defaultExpandAllRows: true,
                 }}
@@ -292,6 +292,8 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
                     console.log(rows);
                   },
                 }}
+                pagination={false}
+                hideTop
               />
 
             </div>

@@ -99,7 +99,9 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     },
     [store]
   )
+  // TODO
   const allowDrag = showDragBar && !loading
+  // const allowDrag = true
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -156,7 +158,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
                 [`${prefixClsTaskBar}-resize-handle-disabled`]: disabled,
               })}
               // style={{ left: -14 }}
-              // style={{ left: -10 }}
+              // style={{ left: width - 10 }}
               onResize={handleResize}
               onResizeEnd={handleLeftResizeEnd}
               defaultSize={{
@@ -177,7 +179,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
                 [`${prefixClsTaskBar}-resize-handle-disabled`]: disabled,
               })}
               // style={{ left: width + 1 }}
-              style={{ left: width }}
+              style={{ left: width - 10 }}
               onResize={handleResize}
               onResizeEnd={handleRightResizeEnd}
               defaultSize={{
@@ -193,10 +195,11 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               onBeforeResize={handleBeforeResize('right')}
               disabled={disabled}
             />
-            <div
+            {/* <div
               className={classNames(`${prefixClsTaskBar}-resize-bg`, `${prefixClsTaskBar}-resize-bg-compact`)}
-              style={{ width: width + 30, left: -14 }}
-            />
+              style={{ width }}
+              // style={{ width: width + 30, left: -14 }}
+            /> */}
           </>
         )}
         <DragResize
@@ -294,10 +297,10 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
 
       {(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
         <>
-          <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 16 }}>
+          <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 10 }}>
             {renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)}
           </div>
-          <div className={`${prefixClsTaskBar}-date-text`} style={{ right: width + 16 }}>
+          <div className={`${prefixClsTaskBar}-date-text`} style={{ right: width + 10 }}>
             {renderLeftText ? renderLeftText(data) : dateTextFormat(translateX)}
           </div>
         </>

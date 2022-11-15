@@ -943,6 +943,7 @@ class GanttStore {
     this.isPointerPress = false
   }
 
+  /** =============== // TODO invalid bar END =============== */
   @action handleInvalidBarLeave() {
     this.handleDragEnd()
   }
@@ -962,6 +963,7 @@ class GanttStore {
     this.handleDragEnd()
     this.updateTaskDate(barInfo, oldSize, 'create')
   }
+  /** =============== // TODO invalid bar END =============== */
 
   /** 更新时间区间的宽度和偏移量x */
   @action updateBarSize(barInfo: Gantt.Bar, { width, x }: { width: number; x: number }) {
@@ -971,7 +973,7 @@ class GanttStore {
   }
 
   getMovedDay(ms: number): number {
-    return Math.round(ms / ONE_DAY_MS)
+    return Math.round(ms / ONE_HOUR_MS)
   }
 
   /** 更新时间 */
@@ -989,16 +991,17 @@ class GanttStore {
     if (type === 'move') {
       const moveTime = this.getMovedDay((translateX - oldSize.x) * this.pxUnitAmp)
       // 移动，只根据移动距离偏移
-      startDate = dayjs(oldStartDate).add(moveTime, 'day').format('YYYY-MM-DD HH:mm:ss')
-      endDate = dayjs(oldEndDate).add(moveTime, 'day').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+      startDate = dayjs(oldStartDate).add(moveTime, 'hour').format('YYYY-MM-DD HH:mm:ss')
+      endDate = dayjs(oldEndDate).add(moveTime, 'hour').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
     } else if (type === 'left') {
       const moveTime = this.getMovedDay((translateX - oldSize.x) * this.pxUnitAmp)
       // 左侧移动，只改变开始时间
-      startDate = dayjs(oldStartDate).add(moveTime, 'day').format('YYYY-MM-DD HH:mm:ss')
+      startDate = dayjs(oldStartDate).add(moveTime, 'hour').format('YYYY-MM-DD HH:mm:ss')
     } else if (type === 'right') {
       const moveTime = this.getMovedDay((width - oldSize.width) * this.pxUnitAmp)
       // 右侧移动，只改变结束时间
-      endDate = dayjs(oldEndDate).add(moveTime, 'day').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+      endDate = dayjs(oldEndDate).add(moveTime, 'hour').hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+      // TODO create
     } else if (type === 'create') {
       // 创建
       startDate = dayjs(translateX * this.pxUnitAmp).format('YYYY-MM-DD HH:mm:ss')

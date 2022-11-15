@@ -52,10 +52,6 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     return selectionIndicatorTop === translateY - baseTop
   }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight])
 
-  console.log('showDragBar-->', showDragBar)
-  console.log('showDragBar--> loading', loading)
-
-
   // const themeColor = useMemo(() => {
   //   // 未预期
   //   if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE']

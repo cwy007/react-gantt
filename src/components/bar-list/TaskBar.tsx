@@ -17,7 +17,7 @@ interface TaskBarProps {
 const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const {
     store,
-    getBarColor,
+    // getBarColor,
     renderBar,
     onBarClick,
     prefixCls,
@@ -35,7 +35,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     dateTextFormat,
     record,
     loading,
-    getDateWidth,
+    // getDateWidth,
   } = data
 
   const { disabled = false } = record || {}
@@ -51,10 +51,12 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     return selectionIndicatorTop === translateY - baseTop
   }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight])
 
-  const themeColor = useMemo(() => {
-    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE']
-    return ['#FD998F', '#F96B5D'] // TODO
-  }, [store.pxUnitAmp, translateX, width])
+  // const themeColor = useMemo(() => {
+  //   // 未预期
+  //   if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE']
+  //   //  预期对应的颜色
+  //   return ['#FD998F', '#F96B5D'] // TODO
+  // }, [store.pxUnitAmp, translateX, width])
 
   const handleBeforeResize = (type: Gantt.MoveType) => () => {
     if (disabled) return
@@ -63,7 +65,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
 
   const handleResize = useCallback(
     ({ width: newWidth, x }) => {
-      if (disabled) return
+      if (disabled) return // 禁用时
       store.updateBarSize(data, { width: newWidth, x })
     },
     [data, store, disabled]
@@ -103,13 +105,16 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const allowDrag = showDragBar && !loading
   // const allowDrag = true
 
+  /** 点击时间区间 */
   const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    (e: React.MouseEvent<SVGRectElement, MouseEvent>) => {
       e.stopPropagation()
       if (onBarClick) onBarClick(data.record)
+      console.log('test click bar')
     },
     [data.record, onBarClick]
   )
+
   const reachEdge = usePersistFn((position: 'left' | 'right') => position === 'left' && store.translateX <= 0)
   // TODO:
   // 根据不同的视图确定拖动时的单位，在任何视图下都以小时为单位
@@ -118,55 +123,33 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const moveCalc = -(width / store.pxUnitAmp)
 
   return (
+    // TODO Popover 鼠标 hover 提示
     <div
       role='none'
       className={classNames(prefixClsTaskBar, {
-        [`${prefixClsTaskBar}-invalid-date-range`]: invalidDateRange,
-        [`${prefixClsTaskBar}-overdue`]: !invalidDateRange,
+        [`${prefixClsTaskBar}-invalid-date-range`]: invalidDateRange, // 无效的时间区间时会隐藏掉
       })}
       style={{
         transform: `translate(${translateX}px, ${translateY}px)`,
       }}
-      onClick={handleClick}
     >
       {loading && <div className={`${prefixClsTaskBar}-loading`} />}
       <div>
         {allowDrag && (
           <>
-            {/* {stepGesture !== 'moving' && (
-              <div className={styles['dependency-handle']} style={{ left: -34, width: 12 }}>
-                <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1">
-                  <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                    <circle className={styles.outer} stroke="#87D2FF" fill="#FFFFFF" cx="6" cy="6" r="5.5" />
-                    <circle className={styles.inner} fill="#87D2FF" cx="6" cy="6" r="2" />
-                  </g>
-                </svg>
-              </div>
-            )}
-            {stepGesture !== 'moving' && (
-              <div className={classNames(styles['dependency-handle'], styles.right)} style={{ left: width + 28, width: 12 }}>
-                <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1">
-                  <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                    <circle className={styles.outer} stroke="#87D2FF" fill="#FFFFFF" cx="6" cy="6" r="5.5" />
-                    <circle className={styles.inner} fill="#87D2FF" cx="6" cy="6" r="2" />
-                  </g>
-                </svg>
-              </div>
-            )} */}
             <DragResize
-              className={classNames(`${prefixClsTaskBar}-resize-handle`, `${prefixClsTaskBar}-resize-handle-left`, {
+              className={classNames(`${prefixClsTaskBar}-resize-handle`,
+                `${prefixClsTaskBar}-resize-handle-left`, {
                 [`${prefixClsTaskBar}-resize-handle-disabled`]: disabled,
               })}
-              // style={{ left: -14 }}
-              // style={{ left: width - 10 }}
               onResize={handleResize}
               onResizeEnd={handleLeftResizeEnd}
               defaultSize={{
-                x: translateX,
+                x: translateX, // 时间区间起点的偏移量
                 width,
               }}
-              minWidth={30}
-              grid={grid}
+              // minWidth={24}
+              // grid={grid}
               type='left'
               scroller={store.chartElementRef.current || undefined}
               onAutoScroll={handleAutoScroll}
@@ -175,10 +158,10 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               disabled={disabled}
             />
             <DragResize
-              className={classNames(`${prefixClsTaskBar}-resize-handle`, `${prefixClsTaskBar}-resize-handle-right`, {
+              className={classNames(`${prefixClsTaskBar}-resize-handle`,
+                `${prefixClsTaskBar}-resize-handle-right`, {
                 [`${prefixClsTaskBar}-resize-handle-disabled`]: disabled,
               })}
-              // style={{ left: width + 1 }}
               style={{ left: width - 10 }}
               onResize={handleResize}
               onResizeEnd={handleRightResizeEnd}
@@ -186,8 +169,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
                 x: translateX,
                 width,
               }}
-              minWidth={30}
-              grid={grid}
+              // minWidth={24}
+              // grid={grid}
               type='right'
               scroller={store.chartElementRef.current || undefined}
               onAutoScroll={handleAutoScroll}
@@ -195,6 +178,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               onBeforeResize={handleBeforeResize('right')}
               disabled={disabled}
             />
+
+            {/* 拖拽背景 */}
             {/* <div
               className={classNames(`${prefixClsTaskBar}-resize-bg`, `${prefixClsTaskBar}-resize-bg-compact`)}
               style={{ width }}
@@ -202,6 +187,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
             /> */}
           </>
         )}
+
+        {/* 时间区间 */}
         <DragResize
           className={`${prefixClsTaskBar}-bar`}
           onResize={handleResize}
@@ -210,7 +197,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
             x: translateX,
             width,
           }}
-          minWidth={30}
+          minWidth={24}
           grid={grid}
           type='move'
           scroller={store.chartElementRef.current || undefined}
@@ -242,7 +229,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
                 fillOpacity={1}
                 stroke={'black'}
                 strokeOpacity={0}
-                // className={valueRect}
+                onClick={handleClick}
+                // className={}
                 // onClick={() => {
                 //   if (nodeClickArr && nodeClickArr.length > 0) {
                 //     const currentClientFunc = nodeClickArr.find(
@@ -287,20 +275,22 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
             </svg>
           )}
         </DragResize>
+
+        {/* TODO 编辑，复制，删除 */}
       </div>
 
-      {(allowDrag || disabled || alwaysShowTaskBar) && (
+      {/* {(allowDrag || disabled || alwaysShowTaskBar) && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
           {getDateWidth(translateX + width + moveCalc, translateX)}天
         </div>
-      )}
+      )} */}
 
       {(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
         <>
-          <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 10 }}>
+          <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 16 }}>
             {renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)}
           </div>
-          <div className={`${prefixClsTaskBar}-date-text`} style={{ right: width + 10 }}>
+          <div className={`${prefixClsTaskBar}-date-text`} style={{ right: width + 16 }}>
             {renderLeftText ? renderLeftText(data) : dateTextFormat(translateX)}
           </div>
         </>

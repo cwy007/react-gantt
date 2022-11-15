@@ -9,7 +9,7 @@ interface TaskBarProps {
   data: Gantt.Bar
 }
 
-/** 排期区间 bar 的缩略图，点击会平移甘特图，显示对应的排期 bar */
+/** 时间区间 bar 的缩略图，点击会平移甘特图，显示对应的排期 bar */
 const TaskBarThumb: React.FC<TaskBarProps> = ({ data }) => {
   const { store, renderBarThumb, prefixCls, getBarColor } = useContext(Context)
   const prefixClsTaskBarThumb = `${prefixCls}-task-bar-thumb`
@@ -17,9 +17,9 @@ const TaskBarThumb: React.FC<TaskBarProps> = ({ data }) => {
   const { translateX, translateY, label, record } = data
 
   /**
-   * 排期区间位于甘特图右侧 type: right
+   * 时间区间位于甘特图右侧 type: right
    *
-   * 排期区间位于甘特图左侧侧 type: left
+   * 时间区间位于甘特图左侧侧 type: left
    */
   const type = useMemo(() => {
     const rightSide = viewTranslateX + viewWidth // 甘特图右侧

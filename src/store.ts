@@ -165,6 +165,7 @@ class GanttStore {
   /** tableBody 和 gantt 的父元素 main */
   mainElementRef = createRef<HTMLDivElement>()
 
+  /** gantt-chart ref */
   chartElementRef = createRef<HTMLDivElement>()
 
   /** 是否在拖拽排期区间 */
@@ -768,7 +769,7 @@ class GanttStore {
     const topStep = this.rowHeight
 
     /** 将横坐标 startX 转换为对应的日期格式 */
-    const dateTextFormat = (startX: number) => dayjs(startX * pxUnitAmp).format('YYYY-MM-DD HH:mm:ss')
+    const dateTextFormat = (startX: number) => dayjs(startX * pxUnitAmp).format('YYYY-MM-DD HH:mm')
 
     /** 开始时间和结束时间之间相差的天数 */
     const getDateWidth = (start: number, endX: number) => {
@@ -947,6 +948,7 @@ class GanttStore {
     this.updateTaskDate(barInfo, oldSize, 'create')
   }
 
+  /** 更新时间区间的宽度和偏移量x */
   @action updateBarSize(barInfo: Gantt.Bar, { width, x }: { width: number; x: number }) {
     barInfo.width = width
     barInfo.translateX = Math.max(x, 0)

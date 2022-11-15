@@ -80,7 +80,7 @@ export namespace Gantt {
     translateX: number
     /** 排期条垂直方向偏移量 */
     translateY: number
-    /** start(开始）、moving(移动)、end(结束) */
+    /** 拖拽bar标识：start(开始）、moving(移动)、end(结束) */
     stepGesture: 'start' | 'moving' | 'end'
     /** 是否为有效时间区间 */
     invalidDateRange: boolean

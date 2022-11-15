@@ -10,20 +10,19 @@ interface DragResizeProps extends React.HTMLProps<HTMLDivElement> {
   onResizeEnd?: ({ width, x }: { width: number; x: number }) => void;
   /** 在左右拖拽前执行 */
   onBeforeResize?: () => void;
+  /** 左右拖拽时时间区间的最小宽度 */
   minWidth?: number;
-  /** // TODO: ?? */
+  /** 缩放的类型：left拖拽左侧拖柄，right拖拽右侧的拖柄，move移动时间区间  */
   type: 'left' | 'right' | 'move';
   /** // TODO: ?? 默认值 undefined */
   grid?: number;
-  /** // TODO ??,默认值 undefined */
+  /** gantt-chart element ref */
   scroller?: HTMLElement;
   defaultSize: {
-    /** // TODO ?? */
+    /** 时间区间的宽度，对应 bar.width */
     width: number;
     /**
-     * translateX 对应的值，负值向左平移，正值向右平移
-     *
-     * 始终小于 0
+     * bar.translateX 对应的值
      * */
     x: number;
   };
@@ -38,7 +37,13 @@ interface DragResizeProps extends React.HTMLProps<HTMLDivElement> {
   disabled?: boolean
 }
 
-const snap = (n: number, size: number): number => Math.round(n / size) * size;
+/**
+ * 返回视图单位的整数倍
+ * @param width 拖拽后时间区间的长度，单位像素
+ * @param grid 天对应的长度，单位像素
+ * @returns
+ */
+const snap = (width: number, grid: number): number => Math.round(width / grid) * grid;
 
 /**
  * 控制横轴的左右拖拽，实现左右滚动
@@ -88,11 +93,14 @@ const DragResize: React.FC<DragResizeProps> = ({
           width = Math.max(width, minWidth);
         }
         if (grid) {
-          width = snap(width, grid);
+          width = snap(width, grid); // grid 的整数倍
         }
         const pos = width - positionRef.current.width;
         const x = positionRef.current.x - pos;
-        onResize({ width, x });
+        onResize({
+          width, // 时间区间的宽度
+          x // 时间区间起点偏移量
+        });
         break;
       }
       // 向右，x不变，只变宽度
@@ -101,6 +109,8 @@ const DragResize: React.FC<DragResizeProps> = ({
         if (minWidth !== undefined) {
           width = Math.max(width, minWidth);
         }
+
+        // grid 在任何视图下都以小时为单位
         if (grid) {
           width = snap(width, grid);
         }
@@ -170,10 +180,6 @@ const DragResize: React.FC<DragResizeProps> = ({
       if (disabled) return // 禁用时直接 return
 
       event.stopPropagation();
-
-      // TODO ?? scroller
-      // 甘特图中有用到
-      //
       if (enableAutoScroll && scroller) {
         autoScroll.start();
       }
@@ -184,10 +190,9 @@ const DragResize: React.FC<DragResizeProps> = ({
         setResizing(true); // 拖拽中，改变鼠标样式
       }
 
-      positionRef.current.clientX = event.clientX;
-      positionRef.current.x = defaultX; // -store.translateX
-      positionRef.current.width = defaultWidth; // 0
-
+      positionRef.current.clientX = event.clientX; // 鼠标指针相对于浏览器页面的水平坐标
+      positionRef.current.x = defaultX; // 其实值
+      positionRef.current.width = defaultWidth; // 宽度
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
     }

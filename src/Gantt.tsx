@@ -1,5 +1,7 @@
 import { useSize } from 'ahooks'
 import { Dayjs } from 'dayjs'
+import { toJS } from 'mobx'
+import { Observer } from 'mobx-react-lite'
 import React, {
   useContext, useEffect, useImperativeHandle, useMemo, useRef, useCallback,
 } from 'react'
@@ -13,7 +15,7 @@ import TableHeader from './components/table-header'
 import TimeAxis from './components/time-axis'
 import TimeAxisScaleSelect from './components/time-axis-scale-select'
 import TimeIndicator from './components/time-indicator'
-import { BAR_HEIGHT, ROW_HEIGHT, TABLE_INDENT } from './constants'
+import { BAR_HEIGHT, INIT_TABLE_WIDTH, ROW_HEIGHT, TABLE_INDENT } from './constants'
 import Context, { GanttContext } from './context'
 import './Gantt.less'
 import GanttStore from './store'
@@ -241,46 +243,72 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     ]
   )
 
+  console.log('store-->', toJS(store))
   return (
-    <Context.Provider value={ContextValue}>
-      <Body>
-        {/* TODO 使用 css module 修改样式 */}
-        <header>
-          <TableHeader />
-          <TimeAxis />
-        </header>
+    <Observer>
+      {() => (
+        <Context.Provider value={ContextValue}>
+          <Body>
+            {/* TODO 使用 css module 修改样式 */}
+            <div
+              className={`${prefixCls}-body-left`}
+              style={{
+                width: store.tableWidth,
+                height: '100%',
+              }}
+            >
 
-        <main ref={store.mainElementRef} onScroll={store.handleScroll}>
-          {/* 鼠标hover效果*/}
-          <SelectionIndicator />
+            </div>
 
-          {/* table */}
-          <TableBody />
+            {/* gantt-chart */}
+            <div
+              className={`${prefixCls}-body-right`}
+              style={{
+                width: store.viewWidth,
+              }}
+            >
+              {/* <TableHeader /> */}
+              <header>
+                <TimeAxis />
+              </header>
 
-          {/* 甘特图 */}
-          <Chart />
-        </main>
+              <main
+                ref={store.mainElementRef}
+                onScroll={store.handleScroll}
+              >
+                {/* 鼠标hover效果*/}
+                <SelectionIndicator />
 
-        {/* 拖拽改变甘特图大小的分割线 */}
-        <Divider />
+                {/* table */}
+                {/* <TableBody /> */}
 
-        {/*
-          返回今日按钮
-          当今天没有显示在甘特图的可见区域时，会显示今天按钮
-          点击今天按钮，甘特图中会显示今天对应的坐标
-        */}
-        {showBackToday && <TimeIndicator />}
+                {/* 甘特图 */}
+                <Chart />
+              </main>
+            </div>
 
-        {/* 展示视图切换 */}
-        {showUnitSwitch && <TimeAxisScaleSelect />}
+            {/* 拖拽改变甘特图大小的分割线 */}
+            <Divider />
 
-        {/* 甘特图下方的滚动条 */}
-        <ScrollBar />
+            {/*
+              返回今日按钮
+              当今天没有显示在甘特图的可见区域时，会显示今天按钮
+              点击今天按钮，甘特图中会显示今天对应的坐标
+            */}
+            {showBackToday && <TimeIndicator />}
 
-        {/* 返回顶部按钮 */}
-        {scrollTop && <ScrollTop />}
-      </Body>
-    </Context.Provider>
+            {/* 展示视图切换 */}
+            {showUnitSwitch && <TimeAxisScaleSelect />}
+
+            {/* 甘特图下方的滚动条 */}
+            <ScrollBar />
+
+            {/* 返回顶部按钮 */}
+            {scrollTop && <ScrollTop />}
+          </Body>
+        </Context.Provider>
+      )}
+    </Observer>
   )
 }
 

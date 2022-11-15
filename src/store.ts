@@ -163,7 +163,7 @@ class GanttStore {
 
   // gestureKeyPress = false
 
-  /** tableBody 和 gantt 的父元素 main */
+  /** gantt 的父元素 main */
   mainElementRef = createRef<HTMLDivElement>()
 
   /** gantt-chart ref */
@@ -272,6 +272,7 @@ class GanttStore {
    * size 是元素 gantt-body 的尺寸（容器的尺寸）
    */
   @action syncSize(size: { width?: number; height?: number }) {
+    console.log('syncSize-->', size)
     if (!size.height || !size.width) return
 
     const { width, height } = size

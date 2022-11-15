@@ -48,7 +48,7 @@ const TimeAxis: React.FC = () => {
       <div
         className={prefixClsTimeAxis}
         style={{
-          left: store.tableWidth,
+          // left: store.tableWidth,
           width: store.viewWidth,
         }}
       >

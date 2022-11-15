@@ -168,7 +168,11 @@ class GanttStore {
   /** gantt-chart ref */
   chartElementRef = createRef<HTMLDivElement>()
 
-  /** 是否在拖拽排期区间 */
+  /**
+   * 是否按下鼠标
+   *
+   * 按下鼠标后，上下移动，模拟的 hover 效果不会跟着上下移动
+   * */
   isPointerPress = false
 
   /** 开始时间的字段名称 */
@@ -876,7 +880,11 @@ class GanttStore {
     }
   }
 
-  /** 在 table-body, gantt 上移动鼠标时触发 */
+  /**
+   * 在 table-body, gantt 上移动鼠标时触发
+   *
+   * 按下鼠标后，上下移动，模拟的 hover 效果不会跟着上下移动
+   *  */
   handleMouseMove = debounce(event => {
     if (!this.isPointerPress) this.showSelectionBar(event)
   }, 5)
@@ -919,6 +927,7 @@ class GanttStore {
     this.isPointerPress = true
   }
 
+  /** 拖拽结束 - mouseup */
   @action handleDragEnd() {
     if (this.dragging) {
       this.dragging.stepGesture = 'end'

@@ -6,7 +6,7 @@ import AutoScroller from './AutoScroller';
 
 interface DragResizeProps extends React.HTMLProps<HTMLDivElement> {
   onResize: ({ width, x }: { width: number; x: number }) => void;
-  /* 拖拽前的size */
+  /** 拖拽结束 mouseup */
   onResizeEnd?: ({ width, x }: { width: number; x: number }) => void;
   /** 在左右拖拽前执行 */
   onBeforeResize?: () => void;

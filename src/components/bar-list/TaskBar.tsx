@@ -71,6 +71,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     [data, store, disabled]
   )
 
+  /** 左侧拖拽结束 - mouseup */
   const handleLeftResizeEnd = useCallback(
     (oldSize: { width: number; x: number }) => {
       store.handleDragEnd()
@@ -79,6 +80,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     [data, store]
   )
 
+  /** 右侧拖拽结束 - mouseup */
   const handleRightResizeEnd = useCallback(
     (oldSize: { width: number; x: number }) => {
       store.handleDragEnd()
@@ -87,6 +89,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     [data, store]
   )
 
+  /** 时间区间拖拽结束 - mouseup */
   const handleMoveEnd = useCallback(
     (oldSize: { width: number; x: number }) => {
       store.handleDragEnd()
@@ -121,6 +124,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const grid = useMemo(() => ONE_HOUR_MS / store.pxUnitAmp, [store.pxUnitAmp])
 
   const moveCalc = -(width / store.pxUnitAmp)
+
+  console.log('translateY', translateY)
 
   return (
     // TODO Popover 鼠标 hover 提示
@@ -190,7 +195,9 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
 
         {/* 时间区间 */}
         <DragResize
-          className={`${prefixClsTaskBar}-bar`}
+          className={classNames(`${prefixClsTaskBar}-bar`, {
+            [`${prefixClsTaskBar}-bar-hover`]: store.getHovered(translateY)
+          })}
           onResize={handleResize}
           onResizeEnd={handleMoveEnd}
           defaultSize={{

@@ -258,7 +258,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
                 height: '100%',
               }}
             >
-              <TableScene
+              {/* <TableScene
                 namespace="newcoreTableSceneTree"
                 simple
                 exportConfig
@@ -294,7 +294,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
                 }}
                 pagination={false}
                 hideTop
-              />
+              /> */}
 
             </div>
 

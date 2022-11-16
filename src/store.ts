@@ -275,7 +275,7 @@ class GanttStore {
    */
   syncSize(size: { width?: number; height?: number }) {
     console.log('syncSize-->', size)
-    if (!size.height || !size.width) return
+    if (!size?.height || !size?.width) return
 
     const { width, height } = size
     if (this.height !== height) this.height = height

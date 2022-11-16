@@ -14,7 +14,7 @@ nav:
 
 左侧使用 TableScene 组件
 
-<code src="./demo/tableScene.tsx"></code>
+<!-- <code src="./demo/tableScene.tsx"></code> -->
 
 ### 基础使用
 
@@ -26,7 +26,7 @@ nav:
 
 点击即可新建 `bar`
 
-<!-- <code src="./demo/add.tsx"></code> -->
+<code src="./demo/add.tsx"></code>
 
 ### 多级结构
 
@@ -42,27 +42,27 @@ nav:
 
 其中，如果每列都配置 `width` 属性。组件内部会计算总宽度。默认初始化表格宽度为总宽度
 
-<!-- <code src="./demo/column.tsx"></code> -->
+<code src="./demo/column.tsx"></code>
 
 ### 依赖结构
 
-<!-- <code src="./demo/dependence.tsx"></code> -->
+<code src="./demo/dependence.tsx"></code>
 
 ### 自定义渲染
 
-<!-- <code src="./demo/render.tsx"></code> -->
+<code src="./demo/render.tsx"></code>
 
 ### 自定义筛选
 
 默认当前日期筛选支持 日、周、月、季、年。支持传入配置，自定义筛选维度
 
-<!-- <code src="./demo/filterUnit.tsx"></code> -->
+<code src="./demo/filterUnit.tsx"></code>
 
 ### 高级用法
 
 主要介绍 `alwaysShowTaskBar` `unit` 以及 `innerRef` 上内置方法的使用
 
-<!-- <code src="./demo/custom.tsx"></code> -->
+<code src="./demo/custom.tsx"></code>
 
 ## 类型定义
 

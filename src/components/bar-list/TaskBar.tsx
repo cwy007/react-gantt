@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
-import { usePersistFn } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import Context from '../../context'
 import { Gantt } from '../../types'
 import DragResize from '../drag-resize'
@@ -120,7 +120,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   )
 
   /** 是否到最左边了 */
-  const reachEdge = usePersistFn((position: 'left' | 'right') => position === 'left' && store.translateX <= 0)
+  const reachEdge = useMemoizedFn((position: 'left' | 'right') => position === 'left' && store.translateX <= 0)
   // TODO:
   // 根据不同的视图确定拖动时的单位，在任何视图下都以小时为单位
   const grid = useMemo(() => ONE_HOUR_MS / store.pxUnitAmp, [store.pxUnitAmp])

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { usePersistFn } from 'ahooks'; // TODO ahook v2 -> v3
+import { useMemoizedFn } from 'ahooks'; // TODO ahook v2 -> v3
 
 /**
  * 拖拽相关逻辑
@@ -27,10 +27,7 @@ export default function useDragResize(
   });
   const initSizeRef = useRef(initSize);
 
-  // TODO ahook 3 useMemoizedFn
-  // https://ahooks.gitee.io/zh-CN/hooks/use-memoized-fn
-  //
-  const handleMouseMove = usePersistFn(async (event: MouseEvent) => {
+  const handleMouseMove = useMemoizedFn(async (event: MouseEvent) => {
     const distance = event.clientX - positionRef.current.left;
     let width = initSizeRef.current.width + distance;
     if (minWidthConfig !== undefined) {

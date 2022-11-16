@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { usePersistFn } from 'ahooks';
+import { useMemoizedFn } from 'ahooks';
 import { observer } from 'mobx-react-lite';
 import AutoScroller from './AutoScroller';
 
@@ -78,7 +78,7 @@ const DragResize: React.FC<DragResizeProps> = ({
   });
 
   // TODO ??
-  const updateSize = usePersistFn(() => {
+  const updateSize = useMemoizedFn(() => {
     if (disabled) return
 
     const distance =
@@ -131,24 +131,18 @@ const DragResize: React.FC<DragResizeProps> = ({
     }
   });
 
-  // https://ahooks.gitee.io/zh-CN/hooks/use-memoized-fn
-  // useMemoizedFn
-  //
-  const handleAutoScroll = usePersistFn((delta: number) => {
+  const handleAutoScroll = useMemoizedFn((delta: number) => {
     updateSize();
     onAutoScroll(delta);
   });
 
-  // TODO persist reachEdge
-  // 自动滚动逻辑
-  //
   const autoScroll = useMemo(
     () =>
       new AutoScroller({ scroller, onAutoScroll: handleAutoScroll, reachEdge }),
     [handleAutoScroll, scroller, reachEdge]
   );
 
-  const handleMouseMove = usePersistFn((event: MouseEvent) => {
+  const handleMouseMove = useMemoizedFn((event: MouseEvent) => {
     if (disabled) return // 禁用时直接 return
     if (!resizing) {
       setResizing(true);
@@ -160,7 +154,7 @@ const DragResize: React.FC<DragResizeProps> = ({
     updateSize();
   });
 
-  const handleMouseUp = usePersistFn(() => {
+  const handleMouseUp = useMemoizedFn(() => {
     if (disabled) return
     autoScroll.stop();
     window.removeEventListener('mousemove', handleMouseMove);
@@ -175,7 +169,7 @@ const DragResize: React.FC<DragResizeProps> = ({
     }
   });
 
-  const handleMouseDown = usePersistFn(
+  const handleMouseDown = useMemoizedFn(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (disabled) return // 禁用时直接 return
 

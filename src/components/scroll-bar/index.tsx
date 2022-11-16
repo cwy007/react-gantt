@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useState, useRef } from 'react'
-import { usePersistFn } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import { observer } from 'mobx-react-lite'
 import Context from '../../context'
 import './index.less'
@@ -18,9 +18,7 @@ const ScrollBar: React.FC = () => {
     translateX: 0,
   })
 
-  // TODO https://ahooks.gitee.io/zh-CN/hooks/use-memoized-fn
-  //
-  const handleMouseMove = usePersistFn((event: MouseEvent) => {
+  const handleMouseMove = useMemoizedFn((event: MouseEvent) => {
     const distance = event.clientX - positionRef.current.left // 鼠标移动的距离
     // TODO 调整倍率
     // 甘特图下方滚动条拖拽按钮的宽度越小，滚动越快

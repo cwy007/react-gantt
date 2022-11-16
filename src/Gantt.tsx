@@ -265,7 +265,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
                 columns={columns as any}
                 type="normal"
                 tree
-                treeCheckbox
+                // treeCheckbox
                 dataSource={data}
                 // serverSideDataSource={(_f, _s, pagination) =>
                 //   getDataSource(pagination).then((res: any) => ({
